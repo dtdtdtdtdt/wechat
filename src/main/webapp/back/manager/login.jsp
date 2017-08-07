@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
 <head>
@@ -9,7 +11,7 @@
 <link rel="stylesheet" href="back/css/login.css">
 <script src="back/js/jquery-1.9.1.js"></script>
 <script src="back/js/bootstrap.min.js"></script>
-
+<script src="back/js/common.js"></script>
 <script>
 	$(function(){ 
 		$(".container").css("position","fixed").css("top",($(window).height()-$(".container").height())/2)

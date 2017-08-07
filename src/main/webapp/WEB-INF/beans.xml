@@ -10,11 +10,12 @@
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/task 
-        http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/task/spring-task.xsd
         http://www.springframework.org/schema/mvc 
-           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 
 	<import resource="beans_email.xml" />
@@ -56,8 +57,8 @@
 		<!-- 数据源 -->
 		<property name="dataSource" ref="dataSource" />
 		<!-- 如果不读取 mybatis-config.xml文件，那 typealiases, mapper的配置都要单独配 -->
-		<property name="typeAliasesPackage" value="com/wx/*" />
-		<property name="mapperLocations" value="classpath*:com/yc/bean/*.xml" />
+		<property name="typeAliasesPackage" value="com/wx/common/bean" />
+		<property name="mapperLocations" value="classpath*:com/wx/common/bean/*.xml" />
 		<!-- 主要用来配置mybatis中的 configuration中的settings配置 -->
 		<property name="configurationProperties">
 			<props>
@@ -89,10 +90,10 @@
 	<tx:annotation-driven transaction-manager="txManager" />
 
 
-	<!-- spring mvc 视图解析器 , 访问的页面都在 /pages/xxx.jsp -->
+	<!-- spring mvc 视图解析器 , 访问的页面都在 /page/xxx.jsp -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="prefix" value="/back/manager/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 

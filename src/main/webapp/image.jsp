@@ -55,19 +55,3 @@ java.awt.image.*,java.util.*,javax.imageio.*"%>
 	out.clear();
 	out = pageContext.pushBody();
 %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

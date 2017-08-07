@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.AdminMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	
+	<!-- 查所有区 -->
+	<select id="AdminLogin" resultType="Admin" parameterType="Admin">
+		select * from admin where aname=#{aname} and apwd=#{apwd}
+	</select>
+	
+</mapper>
