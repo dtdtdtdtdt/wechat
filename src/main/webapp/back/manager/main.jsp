@@ -20,7 +20,7 @@
 
 					"text" : "自定义菜单",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/addMenu.jsp'/>"
 					}
 				},
 				{
@@ -114,12 +114,14 @@
 			<div title="安全权限" style="">
 				<div class="easyui-panel" style="padding: 5px">
 					<ul id="RightTree" class="easyui-tree" data-options="animate:true,state:closed,fit:true">
+						
 					</ul>
 				</div>
 			</div>
 
 			<div title="微信后台管理" style="overflow: auto; padding: 5px;">
 				<div class="easyui-panel" style="padding: 5px">
+					
 					<ul id=ManageTree class="easyui-tree" data-options="animate:true,state:closed,fit:true">
 					</ul>
 				</div>
