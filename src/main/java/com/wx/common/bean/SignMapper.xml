@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.SignMapper">
+	
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+	
+	
+	<!-- 插入数据  修改时间让数据库自动生成！简单便捷 -->
+	<insert id="addSign">
+		insert into sign(fromUserName,signCount,integration,lastModifytime,signHistory)
+		values(#{fromUserName},#{signCount},#{integration},now(),#{signHistory})
+	</insert>
+	
+	
+	<!-- 根据用户名查询该用户信息 -->
+	<select id="findSignByFromUserName" parameterType="Sign"  resultType="Sign">
+		select s.fromUserName,s.signCount,s.integration,s.lastModifytime from sign as s 
+		where fromUserName = #{fromUserName}
+	</select>
+	
+	<!-- 签到更新更新操作 -->
+	<update id="updateSign" parameterType="Sign" >
+		update sign set signCount=#{signCount},integration=#{integration},
+			  lastModifytime=now(),signHistory=#{signHistory}    
+		where fromUserName =#{fromUserName}
+	</update>
+	
+	
+
+	
+
+
+</mapper>

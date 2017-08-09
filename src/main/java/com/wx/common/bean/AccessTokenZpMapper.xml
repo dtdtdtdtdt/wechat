@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.AccessTokenZpMapper">
+	
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+	
+	
+	<!-- 第一次则插入数据库 -->
+	<insert id="addAccessToken" parameterType="AccessTokenZp">
+	   	insert into accesstoken(lastModifytime,access_token) 
+		values( now(),#{access_token} );
+	</insert>
+	
+
+	<!-- 每两小时更新一下 -->
+	<update id="updateAccessToken">
+		update accesstoken set lastModifytime = now(),access_token=#{access_token} where aid=1;
+	</update>
+
+	<!-- 查询 -->
+	<select id="serachAccessToken" resultType="AccessTokenZp">
+		select * from accesstoken 
+	</select>
+
+
+</mapper>
