@@ -79,11 +79,14 @@
 			$("#mainTt").tabs("add", {
 				title : node.text,
 				selected : true,
-				closable : true,
 				tools : [ {
-					//iconCls:'icon-cancel',
+					iconCls : 'icon-clear',
 					handler : function() {
-						alert('save')
+						$.messager.confirm('温馨提示', '确认关闭吗?', function(r){
+							if (r){
+								$("#mainTt").tabs("close", node.text);
+							}
+						});
 					}
 				} ],
 				content : node.attributes.url
