@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class UserLx implements Serializable{
 	private static final long serialVersionUID = 2454542358870962981L;
 	
-private Integer total;
+	private Integer total;
 	
 	private Integer count;
 	// 用户的标识  

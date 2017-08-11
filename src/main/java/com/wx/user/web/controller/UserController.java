@@ -22,11 +22,11 @@ public class UserController {
 	@Resource(name="userBizImpl")
 	private UserBiz userBiz;
 	
-	@RequestMapping()
+	@RequestMapping("/back/findUsers.action")
 	public void showUserList(HttpServletResponse response){
+		//userBiz.getAndSaveUser();
 		List<UserLx> list=userBiz.findAllUser();
 		Gson gson=new Gson();
-		
 		int count=userBiz.findUserCount();
 		//easyui要求的格式
 		Map<String,Object> map=new HashMap<String,Object>();

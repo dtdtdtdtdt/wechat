@@ -27,111 +27,116 @@ import com.wx.common.bean.AccessTokenZp;
 
 import net.sf.json.JSONObject;
 
-
 public class WeixinUtil {
-	//我的公众号
-//	private static final String APPID = "wxf42c153b6e387a35";
-//	private static final String APPSECRET = "d302b846bf4acf8099c45c2fb7b10b06";
-	//测试号
-	private static final String APPID = "wxddbf6c2b96955a2e";
-	private static final String APPSECRET = "d4624c36b6795d1d99dcf0547af5443d";
+	// 我的公众号
+	// private static final String APPID = "wxf42c153b6e387a35";
+	// private static final String APPSECRET =
+	// "d302b846bf4acf8099c45c2fb7b10b06";
+	// 测试号
 	
+	private static final String APPID = "wx728060a0fdaaa085";
+	private static final String APPSECRET = "222c0b10fae1b6d4a276793c67ffb12a";
+
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-	
+
 	private static final String UPLOAD_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
-	
+
 	private static final String CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
-	
+
 	public static final String QUERY_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
-	
+
 	public static final String DELETE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
 
+	public static final String QUN_FA_URL = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
+
+	public static final String USERLIST_URL="https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
 	
-	public static final String  QUN_FA_URL ="https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
-	
-	
+	public static final String USER_URL="https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 	/**
 	 * get请求
+	 * 
 	 * @param url
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static JSONObject doGetStr(String url) throws ParseException, IOException{
+	public static JSONObject doGetStr(String url) throws ParseException, IOException {
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(url);
 		JSONObject jsonObject = null;
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity entity = httpResponse.getEntity();
-		if(entity != null){
-			String result = EntityUtils.toString(entity,"UTF-8");
+		if (entity != null) {
+			String result = EntityUtils.toString(entity, "UTF-8");
 			jsonObject = JSONObject.fromObject(result);
 		}
 		return jsonObject;
 	}
-	
+
 	/**
 	 * post请求
+	 * 
 	 * @param url
 	 * @param outStr
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static JSONObject doPostStr(String url,String outStr) throws ParseException, IOException{
+	public static JSONObject doPostStr(String url, String outStr) throws ParseException, IOException {
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpPost httpost = new HttpPost(url);
 		JSONObject jsonObject = null;
-		httpost.setEntity(new StringEntity(outStr,"UTF-8"));
+		httpost.setEntity(new StringEntity(outStr, "UTF-8"));
 		HttpResponse response = client.execute(httpost);
-		String result = EntityUtils.toString(response.getEntity(),"UTF-8");
+		String result = EntityUtils.toString(response.getEntity(), "UTF-8");
 		jsonObject = JSONObject.fromObject(result);
 		return jsonObject;
 	}
-	
+
 	/**
 	 * 获取token
+	 * 
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static AccessTokenZp getAccessToken() throws ParseException, IOException{
+	public static AccessTokenZp getAccessToken() throws ParseException, IOException {
 		AccessTokenZp token = new AccessTokenZp();
 		String url = ACCESS_TOKEN_URL.replace("APPID", APPID).replace("APPSECRET", APPSECRET);
 		JSONObject jsonObject = doGetStr(url);
-		if(jsonObject!=null){
+		if (jsonObject != null) {
 			token.setAccess_token(jsonObject.getString("access_token"));
 			token.setExpires_in(jsonObject.getInt("expires_in"));
 		}
 		return token;
 	}
-	
-	
+
 	/**
 	 * 文件上传
 	 */
-	public static String upload(String filePath, String accessToken,String type) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
+	public static String upload(String filePath, String accessToken, String type)
+			throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
 		File file = new File(filePath);
 		if (!file.exists() || !file.isFile()) {
 			throw new IOException("文件不存在");
 		}
 
-		String url = UPLOAD_URL.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
-		
+		String url = UPLOAD_URL.replace("ACCESS_TOKEN", accessToken).replace("TYPE", type);
+
 		URL urlObj = new URL(url);
-		//连接
+		// 连接
 		HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
 
-		con.setRequestMethod("POST"); 
+		con.setRequestMethod("POST");
 		con.setDoInput(true);
 		con.setDoOutput(true);
-		con.setUseCaches(false); 
+		con.setUseCaches(false);
 
-		//设置请求头信息
+		// 设置请求头信息
 		con.setRequestProperty("Connection", "Keep-Alive");
 		con.setRequestProperty("Charset", "UTF-8");
 
-		//设置边界
+		// 设置边界
 		String BOUNDARY = "----------" + System.currentTimeMillis();
 		con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
 
@@ -144,13 +149,13 @@ public class WeixinUtil {
 
 		byte[] head = sb.toString().getBytes("utf-8");
 
-		//获得输出流
+		// 获得输出流
 		OutputStream out = new DataOutputStream(con.getOutputStream());
-		//输出表头
+		// 输出表头
 		out.write(head);
 
-		//文件正文部分
-		//把文件已流文件的方式 推入到url中
+		// 文件正文部分
+		// 把文件已流文件的方式 推入到url中
 		DataInputStream in = new DataInputStream(new FileInputStream(file));
 		int bytes = 0;
 		byte[] bufferOut = new byte[1024];
@@ -159,8 +164,8 @@ public class WeixinUtil {
 		}
 		in.close();
 
-		//结尾部分
-		byte[] foot = ("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8");//定义最后数据分隔线
+		// 结尾部分
+		byte[] foot = ("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8");// 定义最后数据分隔线
 
 		out.write(foot);
 
@@ -171,7 +176,7 @@ public class WeixinUtil {
 		BufferedReader reader = null;
 		String result = null;
 		try {
-			//定义BufferedReader输入流来读取URL的响应
+			// 定义BufferedReader输入流来读取URL的响应
 			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -191,17 +196,11 @@ public class WeixinUtil {
 		JSONObject jsonObj = JSONObject.fromObject(result);
 		System.out.println(jsonObj);
 		String typeName = "media_id";
-		if(!"image".equals(type)){
+		if (!"image".equals(type)) {
 			typeName = type + "_media_id";
 		}
 		String mediaId = jsonObj.getString(typeName);
 		return mediaId;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

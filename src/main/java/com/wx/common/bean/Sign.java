@@ -17,7 +17,6 @@ public class Sign implements Serializable {
 	private Timestamp lastModifytime;  //注意保持格式2017-08-07 19:50:02.0  数据库格式 --最后修改时间（签到）
 	private long signHistory;	//--签到历史
 	private String ext;   //保留字段  不做功能
-	  
 
 	
 	public Integer getSid() {

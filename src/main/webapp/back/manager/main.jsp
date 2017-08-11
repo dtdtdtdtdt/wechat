@@ -7,13 +7,13 @@
 				{
 					"text" : "用户管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/addFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp'/>"
 					}
 				},
 				{
 					"text" : "账号角色管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findFoods.jsp'/>"
 					}
 				},
 				{

@@ -1,32 +1,45 @@
 package com.wx.user.biz.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+
+import org.apache.http.ParseException;
 import org.springframework.stereotype.Service;
 
+import com.wx.common.bean.AccessTokenZp;
 import com.wx.common.bean.UserLx;
+import com.wx.common.biz.AccessTokenZpBiz;
 import com.wx.common.dao.BaseDao;
+import com.wx.common.utils.WeixinUtil;
 import com.wx.user.biz.UserBiz;
 
 import net.sf.json.JSONObject;
 
 @Service
 public class UserBizImpl implements UserBiz {
-	private String UserList_URL="https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
-	private String User_URl="https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
-	
 	
 	@Resource(name="baseDao")
 	private BaseDao baseDao;
 	
+	@Resource(name="accessTokenZpBizImpl")
+	private AccessTokenZpBiz accessTokenBiz;
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void getAndSaveUser() {
+	public void refreshUser() {
 		JSONObject jsonObject=new JSONObject();
 		UserLx wu=new UserLx();
-		//jsonObject=gap.doGet(UserList_URL.replace("ACCESS_TOKEN", at.getAccess_token()).replace("NEXT_OPENID", ""));
+		AccessTokenZp at=new AccessTokenZp();
+		at=accessTokenBiz.serachAccessToken();
+		try {
+			jsonObject=WeixinUtil.doGetStr(WeixinUtil.USERLIST_URL.replace("ACCESS_TOKEN", at.getAccess_token()).replace("NEXT_OPENID", ""));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("连接失败!");
+		}
 		wu.setTotal(jsonObject.getInt("total"));
 		wu.setCount(jsonObject.getInt("count"));
 		String openidList=jsonObject.getJSONObject("data").getString("openid");
@@ -51,7 +64,6 @@ public class UserBizImpl implements UserBiz {
 					}else{
 						baseDao.save(wu, "addUser");//ud.addUser(wu);
 					}
-					//System.out.println(wu.toString());
 				}
 			}
 		}
@@ -61,7 +73,14 @@ public class UserBizImpl implements UserBiz {
 	public UserLx getWechatUser(UserLx userLx) {
 		JSONObject jsonObject=new JSONObject();
 		UserLx wu=new UserLx();
-		//jsonObject=gap.doGet(User_URl.replace("OPENID", wechatUser.getOpenid()).replace("ACCESS_TOKEN", at.getAccess_token()));
+		AccessTokenZp at=new AccessTokenZp();
+		at=accessTokenBiz.serachAccessToken();
+		try {
+			jsonObject=WeixinUtil.doGetStr(WeixinUtil.USER_URL.replace("OPENID", userLx.getOpenid()).replace("ACCESS_TOKEN", at.getAccess_token()));
+		} catch (Exception e) {
+			System.out.println("请求失败!");
+			e.printStackTrace();
+		}
 		wu.setTotal(userLx.getTotal());
 		wu.setCount(userLx.getCount());
 		wu.setSubscribe(jsonObject.getInt("subscribe"));
@@ -91,6 +110,27 @@ public class UserBizImpl implements UserBiz {
 	public int findUserCount() {
 		int count=(int) baseDao.findOne(UserLx.class, "findUserCount");
 		return count;
+	}
+
+	@Override
+	public void addUser(UserLx userLx) {
+		baseDao.save(userLx, "addUser");
+	}
+
+	@Override
+	public void deleteUser(UserLx userLx) {
+		baseDao.del(userLx, "deleteUser");
+	}
+
+	@Override
+	public UserLx findUser(UserLx userLx) {
+		userLx=(UserLx) baseDao.findOne(userLx, "findUser");
+		return userLx;
+	}
+
+	@Override
+	public void updateUser(UserLx userLx) {
+		baseDao.update(userLx, "updateUser");
 	}
 
 }

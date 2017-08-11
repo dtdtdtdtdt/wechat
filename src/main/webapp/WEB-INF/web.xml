@@ -47,22 +47,13 @@
 		<url-pattern>*.action</url-pattern>
 	</servlet-mapping>
 	
-	
-	<!-- 
-		<servlet>
-		<servlet-name>weixinServlet</servlet-name>
-		<servlet-class>com.wx.web.servlets.WeixinServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>weixinServlet</servlet-name>
-		<url-pattern>weixin.do</url-pattern>
-	</servlet-mapping>
-	 -->
-	
-	
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.wx.common.web.listeners.InitListener</listener-class>
+	</listener>
+	
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
