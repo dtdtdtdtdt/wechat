@@ -42,7 +42,7 @@ public class WeixinController {
 	private AccessTokenZpBiz accessTokenZpBiz;
 	
 	//微信服务器认证发送一条get请求
-	@RequestMapping(name="/weixin.action",method=RequestMethod.GET)
+	@RequestMapping(value="/weixin.action",method=RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//将微信发过来的参数数据转换成map
 //		Map<String,String> map = XmlAndMap.xmlToMap(req);
@@ -60,7 +60,7 @@ public class WeixinController {
 	}
 	
 	
-	@RequestMapping(name="/weixin.action",method=RequestMethod.POST)
+	@RequestMapping(value="/weixin.action",method=RequestMethod.POST)
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, org.apache.http.ParseException, ParseException {
 		
         //将传过来xml转换为map
@@ -76,7 +76,7 @@ public class WeixinController {
         String msgType = map.get("MsgType");
         String content = map.get("Content");
 		
-		
+		System.out.println( toUserName +"*******************" );
         
         //用户操作事件为点击菜单
         if("event".equals(msgType)){
@@ -130,13 +130,14 @@ public class WeixinController {
         					e.printStackTrace();
         				}
         				
-        				final  long missDays= (System.currentTimeMillis()- dtime)/(24*60*60*1000);  //连续签到则等于 0
+        				final  long missDays= (System.currentTimeMillis()- dtime)/(24*60*60*1000);  //连续签到则等于 1
         				System.out.println( missDays+"--------------------------" );
-        				//如果MissDays == 1 则说明前一天已经签到连续签到
-        				if( missDays==1 ){
+        				//如果MissDays == 0  或者 1  则说明前一天已经签到连续签到 等于零表示时间差小于24小时
+        				if( missDays < 2 ){
         					s.setSignCount( s.getSignCount()+1  ); //连续签到天数加一
+        					s.setSignHistory( s.getSignHistory()+1 ); //签到历史  用于记录总签单天数
         					//解决积分问题  根据签到天数判断积分问题
-        					switch( signCount ){
+        					switch( signCount+1 ){
         						case 1:s.setIntegration( s.getIntegration()+1 ); break;
         						case 2:s.setIntegration( s.getIntegration()+2 ); break;
         						case 3:s.setIntegration( s.getIntegration()+4 ); break;

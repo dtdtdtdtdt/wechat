@@ -46,8 +46,12 @@ public class WeixinUtil {
 	
 	public static final String DELETE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
 
-	
+	//群发信息
 	public static final String  QUN_FA_URL ="https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
+	
+	
+	
+	
 	
 	
 	/**

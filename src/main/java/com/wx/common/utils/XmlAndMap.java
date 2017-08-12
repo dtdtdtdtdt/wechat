@@ -30,6 +30,7 @@ public class XmlAndMap {
             InputStream ins = request.getInputStream();
              
             Document doc = reader.read(ins);
+            
             Element root = doc.getRootElement();
              
             List<Element> list = root.elements();

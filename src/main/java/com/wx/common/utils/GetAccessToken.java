@@ -19,10 +19,10 @@ public class GetAccessToken implements Serializable {
 		//进行判断assesstoken是否过期
 		long dtime = CommonDateUtils.StrDateFormat( accesstoken.getLastModifytime().toString()).getTime();
 		//根据当前时间戳减去数据库中的时间
-		double time = (System.currentTimeMillis()-dtime)/3600/1000;
+		double time = (System.currentTimeMillis()-dtime)/3600.0/1000.0;
 //		System.out.println( "时间差为:"+ time);
 		//如果大于两小时则更新数据库
-		if( time>2.0 ){
+		if( time>=2.00000000000000 ){
 			accesstokenBiz.updateAccessToken();
 			//更新数据库后重新获取
 			AccessTokenZp newAccesstoken = accesstokenBiz.serachAccessToken();
