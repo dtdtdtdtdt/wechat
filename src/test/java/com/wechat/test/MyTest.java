@@ -39,7 +39,7 @@ public class MyTest {
 		
 		
 		System.out.println("最近签到日期"+ sign.getLastModifytime() );  //签到时间
-//		System.out.println(  sign.getLastModifytime().toString() );
+
 
 
 		
@@ -53,6 +53,7 @@ public class MyTest {
 		
 		//计算断签天数	如果大于2则说明是断签的人				//当前时间戳 1502097484772    1501952400000
 		final  long missDays= ( System.currentTimeMillis() - dtime )/(24*60*60*1000);
+		// 等于零 表示 两次时间差小于24小时 
 		//System.currentTimeMillis()
 		System.out.println( missDays );
 		

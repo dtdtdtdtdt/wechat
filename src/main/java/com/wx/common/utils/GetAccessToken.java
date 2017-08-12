@@ -12,6 +12,11 @@ import com.wx.common.biz.AccessTokenZpBiz;
 public class GetAccessToken implements Serializable {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static String getAT( AccessTokenZpBiz  accesstokenBiz  ) throws ParseException, IOException, java.text.ParseException{
 		AccessTokenZp accesstoken = accesstokenBiz.serachAccessToken();
 		

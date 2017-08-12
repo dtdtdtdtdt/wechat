@@ -7,13 +7,13 @@
 				{
 					"text" : "用户管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/addFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp'/>"
 					}
 				},
 				{
 					"text" : "账号角色管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findFoods.jsp'/>"
 					}
 				},
 				{
@@ -79,11 +79,14 @@
 			$("#mainTt").tabs("add", {
 				title : node.text,
 				selected : true,
-				closable : true,
 				tools : [ {
-					//iconCls:'icon-cancel',
+					iconCls : 'icon-clear',
 					handler : function() {
-						alert('save')
+						$.messager.confirm('温馨提示', '确认关闭吗?', function(r){
+							if (r){
+								$("#mainTt").tabs("close", node.text);
+							}
+						});
 					}
 				} ],
 				content : node.attributes.url

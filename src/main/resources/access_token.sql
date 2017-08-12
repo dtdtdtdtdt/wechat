@@ -1,5 +1,7 @@
 --最后更新时间
 --token
+show tables;
+
 drop table accesstoken
 --获取access_token
 create table accesstoken(

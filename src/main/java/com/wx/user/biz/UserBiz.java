@@ -2,18 +2,60 @@ package com.wx.user.biz;
 
 import java.util.List;
 
-import com.wx.user.bean.User;
+import com.wx.common.bean.AccessTokenZp;
+import com.wx.common.bean.UserLx;
+
+import net.sf.json.JSONObject;
+
 
 public interface UserBiz {
+
 	/**
-	 * 请求用户列表
-	 * @return
+	 * 增加单个用户
 	 */
-	public List<User> getAllUser();
+	public void addUser(UserLx userLx);
 	
 	/**
-	 * 查询某个用户
+	 * 刷新用户并存入数据库
 	 * @return
 	 */
-	public User getUserByOpenid();
+	public void refreshUser();
+	
+	/**
+	 * 从微信服务器获取单个用户
+	 * @param wechatUser
+	 * @return
+	 */
+	public UserLx getWechatUser(UserLx userLx);
+	
+	/**
+	 * 查询所有用户
+	 * @return
+	 */
+	public List<UserLx> findAllUser();
+	
+	/**
+	 * 查询所有用户数目
+	 * @return
+	 */
+	public int findUserCount();
+	
+	/**
+	 * 删除用户
+	 * @param userLx
+	 */
+	public void deleteUser(UserLx userLx);
+	
+	/**
+	 * 从数据库查询用户
+	 * @param userLx
+	 * @return
+	 */
+	public UserLx findUser(UserLx userLx);
+	
+	/**
+	 * 更新数据库用户数据
+	 * @param userLx
+	 */
+	public void updateUser(UserLx userLx);
 }

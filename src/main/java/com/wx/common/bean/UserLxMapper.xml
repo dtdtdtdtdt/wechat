@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.UserLxMapper">
+
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<!-- 根据用户名和密码查询用户 -->
+	<select id="findUserByOpenid" parameterType="UserLx" resultType="UserLx">
+		select * from users where openid=#{openid}
+	</select>
+
+	<!-- 查询总的数目 -->
+	<select id="findUserCount" resultType="int">
+		select count(*) from users
+	</select>
+	
+	<!-- 删除数据库用户信息 -->
+	<delete id="deleteUser" parameterType="UserLx">
+		delete from users where openid=#{openid}
+	</delete>
+	
+	<!-- 查询单个用户 -->
+	<select id="findUser" parameterType="UserLx" resultType="UserLx">
+		select * from users where openid=#{openid}
+	</select>
+	
+	<!-- 查询所有用户 -->
+	<select id="findAllUser" resultType="UserLx">
+		select * from users
+	</select>
+
+	<!-- 添加用户 返回用户对象 -->
+	<insert id="addUser" parameterType="UserLx" useGeneratedKeys="true" keyProperty="uid">
+		insert into
+		users(total,openid,subscribe,subscribe_time,nickname,
+		sex,country,province,city,language,headimgurl,remark,groupid,tagid_list)
+		values(#{total},#{openid},#{subscribe},#{subscribe_time},#{nickname},#{sex},
+		#{country},#{province},#{city},#{language},#{headimgurl},#{remark},#{groupid},#{tagid_list})
+	</insert>
+
+	<!-- 更新用户信息 -->
+	<update id="updateUser" parameterType="UserLx">
+		update users
+		set total=#{total},subscribe=#{subscribe},subscribe_time=#{subscribe_time},nickname=#{nickname},sex=#{sex},
+		country=#{country},province=#{province},city=#{city},language=#{language},headimgurl=#{headimgurl},
+		remark=#{remark},groupid=#{groupid},tagid_list=#{tagid_list}
+		where openid=#{openid}
+	</update>
+</mapper>

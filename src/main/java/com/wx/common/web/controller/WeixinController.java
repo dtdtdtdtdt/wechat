@@ -2,11 +2,10 @@ package com.wx.common.web.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -17,45 +16,46 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.wx.common.bean.Sign;
+import com.wx.common.bean.UserLx;
 import com.wx.common.biz.AccessTokenZpBiz;
 import com.wx.common.biz.SignBiz;
 import com.wx.common.utils.CheckUtil;
 import com.wx.common.utils.CommonDateUtils;
-import com.wx.common.utils.GetAccessToken;
 import com.wx.common.utils.WxSignNewsMsg;
 import com.wx.common.utils.XmlAndMap;
-import com.wx.message.News;
-import com.wx.message.NewsMessage;
 import com.wx.message.TextMessage;
+import com.wx.user.biz.UserBiz;
 
 @Controller
 public class WeixinController {
-	
-	@Resource(name="signBizImpl")
+
+	@Resource(name = "signBizImpl")
 	private SignBiz signBiz;
-	
-	
-	@Resource(name="accessTokenZpBizImpl")
+
+	@Resource(name = "accessTokenZpBizImpl")
 	private AccessTokenZpBiz accessTokenZpBiz;
+
+	@Resource(name="userBizImpl")
+	private UserBiz ub;
 	
-	//微信服务器认证发送一条get请求
-	@RequestMapping(value="/weixin.action",method=RequestMethod.GET)
+
+	// 微信服务器认证发送一条get请求
+	@RequestMapping(value = "/weixin.action", method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//将微信发过来的参数数据转换成map
-//		Map<String,String> map = XmlAndMap.xmlToMap(req);
-		
-		String signature = req.getParameter("signature");	//微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
-		String timestamp = req.getParameter("timestamp");  //时间戳
-		String nonce = req.getParameter("nonce");		 //随机数
-		String echostr = req.getParameter("echostr");	 //随机字符串
-		
-		//如果请求来自微信则返回echostr给微信 用来验证成功
+		// 将微信发过来的参数数据转换成map
+		// Map<String,String> map = XmlAndMap.xmlToMap(req);
+
+		String signature = req.getParameter("signature"); // 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
+		String timestamp = req.getParameter("timestamp"); // 时间戳
+		String nonce = req.getParameter("nonce"); // 随机数
+		String echostr = req.getParameter("echostr"); // 随机字符串
+
+		// 如果请求来自微信则返回echostr给微信 用来验证成功
 		PrintWriter out = resp.getWriter();
-		if( CheckUtil.checkSignature(signature, timestamp, nonce)){
-			out.print(echostr); 
+		if (CheckUtil.checkSignature(signature, timestamp, nonce)) {
+			out.print(echostr);
 		}
 	}
 	
@@ -84,6 +84,21 @@ public class WeixinController {
 	        String Event = map.get("Event");
 	        //事件为关注
         	if(Event.equals("subscribe")){
+        		//关注时添加到数据库
+				UserLx userLx=new UserLx();
+				userLx.setOpenid(fromUserName);
+				userLx=ub.getWechatUser(userLx);
+
+				//先查询是否存在该用户
+				UserLx wu=new UserLx();
+				wu=ub.findUser(userLx);
+				//不存在则插入  存在即更新
+				if(wu!=null){
+					ub.updateUser(userLx);
+				}else{
+					ub.addUser(userLx);
+				}
+        	
 	            TextMessage text = new TextMessage();
 	            text.setToUserName(fromUserName);
 	            text.setFromUserName(toUserName); 
@@ -94,7 +109,20 @@ public class WeixinController {
 		        out.print(message);
 		        out.flush();
 		        out.close();
-        	}else if( Event.equals("CLICK") ){
+        	}else if(Event.equals("unsubscribe")){
+				//取消关注
+				UserLx userLx=new UserLx();
+				userLx.setOpenid(fromUserName);
+
+				//先查询是否存在该用户
+				UserLx wu=new UserLx();
+				wu=ub.findUser(userLx);
+				//存在即删除
+				if(wu!=null){
+					ub.deleteUser(userLx);
+				}
+				
+			}else if( Event.equals("CLICK") ){
             	//签到
             	Sign sign = new Sign();
             	sign.setFromUserName(fromUserName);
@@ -161,18 +189,8 @@ public class WeixinController {
             			//推送签到文本
             			WxSignNewsMsg.alreadySignNewsMsg(s, fromUserName, toUserName, out);
     				}
-
-
-        	}
-        	}
+            	}
+			}
         }
-    
 	}
-	
-	
-	
-	
-	
-	
-	
 }
