@@ -29,7 +29,7 @@ public class RightFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
 		if (session.getAttribute("admin") == null) {
-			resp.sendRedirect("login.html");
+			resp.sendRedirect("../toLogin.action");
 		} else {
 			chain.doFilter(request, response);
 		}

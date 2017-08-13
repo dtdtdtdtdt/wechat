@@ -79,6 +79,18 @@
 					var time=new Date(parseInt(value) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ")
 					return time; 
 				}
+			},{
+				field:'subscribe',
+				title:'是否关注',
+				width:50,
+				align:'center',
+				formatter:function(value,row){
+					if(value==1){
+						return "已关注";
+					}else{
+						return "未关注";
+					}
+				}
 			}]]
 		});		
 	});

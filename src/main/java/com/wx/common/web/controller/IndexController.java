@@ -11,7 +11,7 @@ public class IndexController {
 	 * 跳转到main.jsp  管理界面
 	 * @return
 	 */
-	@RequestMapping(value="/toMain.action",method=RequestMethod.GET)
+	@RequestMapping(value="/back/toMain.action",method=RequestMethod.GET)
 	public String toMain(){
 		return "main";
 	}

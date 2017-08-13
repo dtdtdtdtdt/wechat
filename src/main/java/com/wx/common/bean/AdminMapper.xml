@@ -10,4 +10,28 @@
 		select * from admin where aname=#{aname} and apwd=#{apwd}
 	</select>
 	
+	<!-- 查询所有管理员 -->
+	<select id="findAllAdmins" resultType="Admin">
+		select * from admin
+	</select>
+	
+	<!-- 删除管理员 -->
+	<delete id="deleteAdmins" parameterType="Admin">
+		delete from admin where aid=#{aid}
+	</delete>
+	
+	<!-- 增加管理员 -->
+	<insert id="addAdmins" parameterType="Admin">
+		insert into admin(aname,apwd) values(#{aname},#{apwd})
+	</insert>
+	
+	<!-- 查询所有用户数目 -->
+	<select id="getAdminsCount" resultType="int">
+		select count(*) from admin
+	</select>
+	
+	<!-- 更新管理员信息 -->
+	<update id="updateAdmins" parameterType="Admin">
+	 	update admin set aname=#{aname},apwd=#{apwd} where aid=#{aid}
+	</update>
 </mapper>
