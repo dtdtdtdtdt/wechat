@@ -11,9 +11,9 @@
 					}
 				},
 				{
-					"text" : "账号角色管理",
+					"text" : "测试",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/test.jsp'/>"
 					}
 				},
 				{
@@ -25,9 +25,9 @@
 				},
 				{
 
-					"text" : "用户授权",
+					"text" : "关键字回复设置",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/foods/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgToReply.jsp'/>"
 					}
 				} ];
 

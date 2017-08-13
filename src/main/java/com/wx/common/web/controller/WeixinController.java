@@ -2,7 +2,6 @@ package com.wx.common.web.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
@@ -17,14 +16,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.wx.common.bean.KeyReply;
 import com.wx.common.bean.Sign;
 import com.wx.common.bean.UserLx;
 import com.wx.common.biz.AccessTokenZpBiz;
+import com.wx.common.biz.KeyReplyBiz;
 import com.wx.common.biz.SignBiz;
 import com.wx.common.utils.CheckUtil;
 import com.wx.common.utils.CommonDateUtils;
+import com.wx.common.utils.KeyReplyUtils;
 import com.wx.common.utils.WxSignNewsMsg;
 import com.wx.common.utils.XmlAndMap;
+import com.wx.message.Image;
+import com.wx.message.ImageMessage;
 import com.wx.message.TextMessage;
 import com.wx.user.biz.UserBiz;
 
@@ -40,7 +44,11 @@ public class WeixinController {
 	@Resource(name="userBizImpl")
 	private UserBiz ub;
 	
-
+	@Resource(name="keyReplyBizImpl")
+	private KeyReplyBiz keyReplyBiz;
+	
+	
+	
 	// 微信服务器认证发送一条get请求
 	@RequestMapping(value = "/weixin.action", method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -98,7 +106,7 @@ public class WeixinController {
 				}else{
 					ub.addUser(userLx);
 				}
-        	
+				//关注时推送！
 	            TextMessage text = new TextMessage();
 	            text.setToUserName(fromUserName);
 	            text.setFromUserName(toUserName); 
@@ -175,7 +183,6 @@ public class WeixinController {
         						case 7:s.setIntegration( s.getIntegration()+64 ); break;    
         						default : s.setIntegration( s.getIntegration()+64 ); break; 
         					}
-        					
         				}else{
         					//否则连续签到次数变为1 
         					s.setSignCount(1);
@@ -191,6 +198,32 @@ public class WeixinController {
     				}
             	}
 			}
+        }else if(msgType.equals("text")){
+        	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
+        	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+        	if(kr!=null){
+        		//根据类型判断进行回复
+        		switch(kr.getKtype()){
+        			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+        			
+        		}
+
+        		
+        	}
+
+
+        		
+        		
+        		
+
+        	
+
+        	
+        	
+        	
         }
 	}
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.KeyReplyMapper">
+	
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+	
+	
+	<!-- 插入数据关键字  -->
+	<insert id="addKeyWords">
+		insert into keyreply(keywords,content,mediaId,title,description,picUrl,url,ktype) 
+		values(#{keywords},#{content},#{mediaId},#{title},#{description},#{picUrl},#{url},#{ktype}) 
+	</insert>
+	
+	
+	<!-- 根据关键字查找  可用于判断是否存在该关键字 -->
+	<select id="findReplyByKeywords" parameterType="KeyReply"  resultType="KeyReply">
+		select * from keyreply where keywords = #{keywords}
+	</select>
+	
+	
+	<!-- 当关键字已存在的时候进行更新 -->
+	<!-- 
+	<update id="updateReplyByKeywords" parameterType="Sign" >
+
+	</update>
+	 -->
+	
+
+	
+
+
+</mapper>
