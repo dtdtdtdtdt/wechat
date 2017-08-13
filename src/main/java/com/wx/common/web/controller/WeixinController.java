@@ -109,20 +109,7 @@ public class WeixinController {
 		        out.print(message);
 		        out.flush();
 		        out.close();
-        	}else if(Event.equals("unsubscribe")){
-				//取消关注
-				UserLx userLx=new UserLx();
-				userLx.setOpenid(fromUserName);
-
-				//先查询是否存在该用户
-				UserLx wu=new UserLx();
-				wu=ub.findUser(userLx);
-				//存在即删除
-				if(wu!=null){
-					ub.deleteUser(userLx);
-				}
-				
-			}else if( Event.equals("CLICK") ){
+        	}else if(Event.equals("CLICK") ){
             	//签到
             	Sign sign = new Sign();
             	sign.setFromUserName(fromUserName);

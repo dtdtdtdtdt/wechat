@@ -57,7 +57,7 @@ public class MenuController {
 			
 			JSONObject jsonObject = JSONObject.fromObject( jo.toString() );  
 			JSONObject menu = jsonObject.getJSONObject("menu");
-			System.out.println(  menu );
+			//System.out.println(  menu );
 			
 			
 			JSONArray array  = menu.getJSONArray("button");  

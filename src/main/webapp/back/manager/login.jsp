@@ -51,7 +51,7 @@
 				success : function(data) {
 					if (data.code == 1) {
 						alert("登录成功！");
-						location.href = "toMain.action";
+						location.href = "back/toMain.action";
 					} else {
 						alert("登录失败！" + data.msg);
 					}

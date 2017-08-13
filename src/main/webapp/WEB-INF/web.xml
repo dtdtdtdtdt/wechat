@@ -11,7 +11,7 @@
 		<filter-name>HiddenHttpMethodFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
 	</filter>
-	
+
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -28,7 +28,10 @@
 		<filter-name>rightFilter</filter-name>
 		<filter-class>com.wx.common.web.filters.RightFilter</filter-class>
 	</filter>
-	
+	<filter-mapping>
+		<filter-name>rightFilter</filter-name>
+		<url-pattern>/back/*</url-pattern>
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>characterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -46,14 +49,13 @@
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>*.action</url-pattern>
 	</servlet-mapping>
-	
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>com.wx.common.web.listeners.InitListener</listener-class>
 	</listener>
-	
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

@@ -11,9 +11,9 @@
 					}
 				},
 				{
-					"text" : "账号角色管理",
+					"text" : "角色管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findFoods.jsp'/>"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp'/>"
 					}
 				},
 				{
@@ -31,7 +31,8 @@
 					}
 				} ];
 
-		var treeDataManage = [ {
+		var treeDataManage = [ 
+			{
 			"text" : "消息管理",
 			"attributes" : {
 				"url" : "<iframe width='100%' height='100%' />"
@@ -100,8 +101,8 @@
 	<div data-options="region:'north'" style="height: 50px;">
 		<div style="font-size:25px;height:auto;text-align:center">
 			微信后台管理界面
-			<div style="font-size:20px;float:right;margin-right:10px;">
-				欢迎您，${admin.aname }&nbsp;&nbsp;<a href="#">退出</a>
+			<div style="font-size:15px;float:right;margin-right:5px;margin-top:10px;">
+				欢迎您，${admin.aname }&nbsp;&nbsp;<a href="adminLogout.action">退出</a>
 			</div>
 		</div>
 	</div>
@@ -111,10 +112,10 @@
 		</div>
 	</div>
 	<div data-options="region:'east',split:true,state:closed" title="East" style="width: 50px;">右边</div>
-	<div data-options="region:'west',split:true" title="菜单" style="width: 150px;">
-		<div class="easyui-accordion" style="width: 150px; height: 300px;">
+	<div data-options="region:'west',split:true,state:closed" title="菜单" style="width: 150px;">
+		<div class="easyui-accordion" style="width: 143px; height: 300px;">
 
-			<div title="安全权限" style="">
+			<div title="安全权限" style="split:true">
 				<div class="easyui-panel" style="padding: 5px">
 					<ul id="RightTree" class="easyui-tree" data-options="animate:true,state:closed,fit:true">
 						
@@ -122,7 +123,7 @@
 				</div>
 			</div>
 
-			<div title="微信后台管理" style="overflow: auto; padding: 5px;">
+			<div title="微信后台管理" style="split:true">
 				<div class="easyui-panel" style="padding: 5px">
 					
 					<ul id=ManageTree class="easyui-tree" data-options="animate:true,state:closed,fit:true">
@@ -133,10 +134,10 @@
 		</div>
 	</div>
 
-	<div data-options="region:'center',title:'主操作区'">
+	<div data-options="region:'center',title:'操作显示页面'">
 		<!-- tabs区，有很多的tab -->
 		<div id="mainTt" class="easyui-tabs" data-options="fit:true,border:false">
-			<div title="待处理业务区">欢迎您，源辰信息！</div>
+			<div title="欢迎首页">欢迎您，源辰信息！</div>
 		</div>
 	</div>
 
