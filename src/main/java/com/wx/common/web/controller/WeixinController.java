@@ -66,7 +66,7 @@ public class WeixinController {
         //将传过来xml转换为map
         Map<String, String> map = XmlAndMap.xmlToMap(req);
         
-        System.out.println( "收到用户发来的信息:"+map );
+        //System.out.println( "收到用户发来的信息:"+map );
         
         
         PrintWriter out = resp.getWriter();
@@ -76,7 +76,7 @@ public class WeixinController {
         String msgType = map.get("MsgType");
         String content = map.get("Content");
 		
-		System.out.println( toUserName +"*******************" );
+		//System.out.println( toUserName +"*******************" );
         
         //用户操作事件为点击菜单
         if("event".equals(msgType)){
@@ -104,11 +104,26 @@ public class WeixinController {
 	            text.setFromUserName(toUserName); 
 	            text.setMsgType("text");     //返回的类型
 	            text.setCreateTime(  new Date().getTime() );
-	            text.setContent("欢迎来到诺亚方舟!等候多时了哦");	
+	            text.setContent("欢迎来到刘翔的测试号!谢谢合作");	
 	            message = XmlAndMap.textMessageToXml(text);
 		        out.print(message);
 		        out.flush();
 		        out.close();
+        	}else if(Event.equals("unsubscribe")){
+        		//取消关注时更新用户信息
+				UserLx userLx=new UserLx();
+				userLx.setOpenid(fromUserName);
+
+				//先查询是否存在该用户
+				UserLx wu=new UserLx();
+				wu=ub.findUser(userLx);
+				//不存在则插入  存在即更新用户关注信息
+				if(wu!=null){
+					ub.updateSubUser(userLx);
+				}else{
+					userLx=ub.getWechatUser(userLx);
+					ub.addUser(userLx);
+				}
         	}else if(Event.equals("CLICK") ){
             	//签到
             	Sign sign = new Sign();

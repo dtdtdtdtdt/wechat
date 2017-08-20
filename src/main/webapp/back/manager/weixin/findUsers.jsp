@@ -3,13 +3,13 @@
 
 <script type="text/javascript">
 	$(function(){
-		$('#manTypeTable').edatagrid({
+		$('#manTypeTable').datagrid({
 			url:'back/findUsers.action',   //查询时加载的URL
 			pagination:true,   //显示分页
 			pageSize:50,       //默认分页的条数
 			fitColumns:true,   //自适应列
 			fit:true,   	   //自动补全
-			title:"查看所有用户",
+			loadMsg:"正在为您加载数据。。。",
 			idField:"openid",		//标识，会记录我们选中的一行的ID，不一定是ID，通常是主键
 			rownumbers:"true",	 //显示行号
 			nowrap:"true",		//不换行显示
@@ -20,6 +20,16 @@
 			onError:function(a,b){
 				$.messager.alert("错误","操作失败");
 			},
+			
+			toolbar:[{
+				text:"导出Excel",
+				iconCls:'icon-save',
+				handler:function(){   
+                     var url = '${pageContext.request.contextPath}/toExcel.action';  
+                     window.location.href=url; 
+				}
+			}],
+			
 			columns:[[{
 				field:'uid',
 				title:'用户编号',
@@ -94,6 +104,8 @@
 			}]]
 		});		
 	});
+	
+	
 </script>
 <title>查看所有用户</title>
 </head>

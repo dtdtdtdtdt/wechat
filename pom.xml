@@ -7,13 +7,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>wechat Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<!-- Spring版本控制 -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.3.2.RELEASE</spring.version>
 	</properties>
-	
+
 	<dependencies>
 
 		<dependency>
@@ -55,7 +55,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
 		</dependency>
-		
+
 
 		<!-- servlet 包，上线后不要，因为 tomcat的lib中自带有, 所以要配置 scope为provided -->
 		<dependency>
@@ -114,7 +114,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<!-- 解析 json的包 -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -143,13 +143,6 @@
 			<version>1.2</version>
 		</dependency>
 
-		<!-- 文件上传, 自己在maven仓库中定义的 -->
-		<dependency>
-			<groupId>com.yc</groupId>
-			<artifactId>smartupload</artifactId>
-			<version>1.0</version>
-		</dependency>
-
 		<!--redis 客户端 -->
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -170,7 +163,7 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
+
 		<!-- JSON、XML、MAP和对象的互转所需jar包 -->
 		<!-- dom4j xml解析包 -->
 		<dependency>
@@ -219,25 +212,36 @@
 		</dependency>
 
 		<!-- json-lib -->
-		<dependency>    
-		    <groupId>net.sf.json-lib</groupId>    
-		    <artifactId>json-lib</artifactId>    
-		    <version>2.4</version>    
-		    <classifier>jdk15</classifier>    
-		</dependency> 
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
 		<!-- 解决collections jar包版本过低问题 -->
 		<dependency>
-		    <groupId>commons-collections</groupId>
-		    <artifactId>commons-collections</artifactId>
-		    <version>3.2.2</version>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.3</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.2</version>
+		</dependency>
 		
+		<dependency>  
+        	<groupId>net.sourceforge.jexcelapi</groupId>  
+        	<artifactId>jxl</artifactId>  
+        	<version>2.6.12</version>  
+    	</dependency> 
 	</dependencies>
 	<build>
 		<finalName>wechat</finalName>

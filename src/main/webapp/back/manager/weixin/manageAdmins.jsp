@@ -1,16 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../head.jsp" %>
-
+<%@ page import="java.util.*,com.wx.common.bean.*" %>
 <script type="text/javascript">
 	var editFlag=undefined;
 	$(function(){
+		<% 
+			List<Role> list=(List<Role>)session.getAttribute("roleList");
+			if(list!=null){
+				String str="";
+				for(Role r:list){
+					str+="{\"text\":\""+r.getRole()+"\"},";
+				}
+		%>
+		var roleName=[<%=str%>];
+		<%
+			}
+		%>
+		
+		
 		$('#manTypeTable').datagrid({
 			url:'back/findAdmins.action',   //查询时加载的URL
 			pagination:true,   //显示分页
 			pageSize:50,       //默认分页的条数
 			fitColumns:true,   //自适应列
 			fit:true,   	   //自动补全
-			//title:"角色管理",
 			loadMsg:"正在为您加载数据。。。",
 			idField:"aid",		//标识，会记录我们选中的一行的ID，不一定是ID，通常是主键
 			rownumbers:"true",	 //显示行号
@@ -41,28 +54,42 @@
 				iconCls:'icon-add',
 				handler:function(){
 					$('#dlg').dialog('open').dialog('center').dialog('setTitle','添加管理员');
+					$.ajax({
+						type : "POST",
+						url : "back/reloadRole.action",
+						dataType : "JSON",
+						success : function(data) {
+							if (data.code == 0) {
+								alert("加载角色失败！" + data.msg);
+							}
+						}
+					});
 				}
 			},'-',{
 				text:"删除",
 				iconCls:'icon-remove',
 				handler:function(){
-					var row=$("#manTypeTable").datagrid('getSelected');
-					if (row!=null){
-						$.ajax({
-							type : "POST",
-							data : "aid="+row.aid,
-							url : "back/deleteAdmins.action",
-							dataType : "JSON",
-							success : function(data) {
-								if (data.code == 1) {
-									alert("删除成功！");
-									location.href = "back/manager/weixin/manageAdmins.jsp";
-								} else {
-									alert("删除失败！" + data.msg);
-								}
+					$.messager.confirm('温馨提示', '确定删除用户?', function(r) {
+		                if (r) {
+		                	var row=$("#manTypeTable").datagrid('getSelected');
+							if (row!=null){
+								$.ajax({
+									type : "POST",
+									data : "aid="+row.aid,
+									url : "back/deleteAdmins.action",
+									dataType : "JSON",
+									success : function(data) {
+										if (data.code == 1) {
+											alert("删除成功！");
+											location.href = "back/manager/weixin/manageAdmins.jsp";
+										} else {
+											alert("删除失败！" + data.msg);
+										}
+									}
+								});
 							}
-						});
-					}
+		                }  
+		            });
 				}
 			},'-',{
 				text:"保存",
@@ -73,7 +100,7 @@
 					if (row!=null){
 						$.ajax({
 							type : "POST",
-							data : "aid="+row.aid+"&aname="+row.aname+"&apwd="+row.apwd,
+							data : "aid="+row.aid+"&aname="+row.aname+"&apwd="+row.apwd+"&role="+row.role,
 							url : "back/updateAdmins.action",
 							dataType : "JSON",
 							success : function(data) {
@@ -94,13 +121,13 @@
 				checkbox:'true'
 			},{
 				field:'aid',
-				title:'管理员编号',
+				title:'用户编号',
 				width:100,
 				align:'center',
 				hidden:'true'
 			},{
 				field:'aname',
-				title:'管理员名称',
+				title:'用户名',
 				width:100,
 				align:'center',
 				editor:{
@@ -111,7 +138,7 @@
 				}
 			},{
 				field:'apwd',
-				title:'账户密码',
+				title:'密码',
 				width:100,
 				align:'center',
 				editor:{
@@ -126,6 +153,33 @@
 				     str = "******";
 				     return str;
 				     }
+				}
+			},{
+				field:'role',
+				title:'角色',
+				width:100,
+				align:'center',
+				formatter:function(value,row){
+					return row.role;
+				},
+				editor:{
+					type:'combobox',
+					options:{
+						editable:false,
+						required:true,
+						data:roleName,
+						valueField:'text',  
+						textField:'text'
+					}
+				}
+			},{
+				field:'atime',
+				title:'创建时间',
+				width:100,
+				align:'center',
+				formatter:function(value,row){
+					var d = new Date(value);
+					return time=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 				}
 			}]]
 		});		
@@ -167,17 +221,25 @@
 		<form id="adminForm" method="post" novalidate>
 			<br>
 			<div>
+				<label>&nbsp;角  色  名：</label>
+					<select class="easyui-combobox" name="role">
+						<c:forEach items="${roleList}" var="role">
+							<option value="${role.role }">${role.role }</option>
+						</c:forEach>
+					</select>
+			</div><br>
+			<div>
 				<label>&nbsp;账  户  名：</label>
 				<input id="aname" name="aname" class="easyui-textbox" required>
-			</div><br><br>
+			</div><br>
 			<div>
 				<label>&nbsp;&nbsp;密&nbsp;&nbsp;码&nbsp;&nbsp;：</label>
 				<input id="apwd" name="apwd" class="easyui-textbox" type="password" required>
-			</div><br><br>
+			</div><br>
 			<div>
 				<label>重复密码：</label>
 				<input id="reapwd" type="password" class="easyui-textbox" validType="equals['#apwd']" required>
-			</div><br><br>
+			</div><br>
 			<div id="dlg-buttons">
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onClick="add()">提交</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:$('#dlg').dialog('close')">取消</a>

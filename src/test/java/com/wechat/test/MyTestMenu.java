@@ -19,7 +19,7 @@ import net.sf.json.JSONObject;
 public class MyTestMenu {
 	public static void main(String[] args) throws ParseException, IOException {
 		//测试查询菜单
-		String access_token = "yf390OkgYKXcvwYWi5kaXlxtRjHwNGIGZUZR-PCIhLxQbukwffbH_j9eA0jTXzh9DYw5zMrfLMhaZ3Usjrs-A_JBtcqMs5DeBdhmSO2n7__8HDkacZbiK6zZhrD366eyUUMbAGALLD";
+		String access_token = "Yh-RaVmIo0S-ynHZ3kyDgRCCjn1jVUUtH9QYyFpMYtwKvLDCn5cXU6jq80V9BoogZ63xCrdFtwkDVM0KPgvoJ8SoJrrzL6tyXKJD2BH41xP6TdNW_r5ElBPz88i6BbpxZXViAGAIGE";
 		String url = WeixinUtil.QUERY_MENU_URL.replace("ACCESS_TOKEN", access_token);
 		JSONObject jo = WeixinUtil.doGetStr(url);
 		

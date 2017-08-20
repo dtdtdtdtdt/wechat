@@ -15,6 +15,11 @@
 		select * from admin
 	</select>
 	
+	<!-- 根据aid查询用户 -->
+	<select id="findAdminByAid" resultType="Admin" parameterType="Admin">
+		select * from admin where aid=#{aid}
+	</select>
+	
 	<!-- 删除管理员 -->
 	<delete id="deleteAdmins" parameterType="Admin">
 		delete from admin where aid=#{aid}
@@ -22,16 +27,11 @@
 	
 	<!-- 增加管理员 -->
 	<insert id="addAdmins" parameterType="Admin">
-		insert into admin(aname,apwd) values(#{aname},#{apwd})
+		insert into admin(aname,apwd,role,atime) values(#{aname},#{apwd},#{role},now())
 	</insert>
-	
-	<!-- 查询所有用户数目 -->
-	<select id="getAdminsCount" resultType="int">
-		select count(*) from admin
-	</select>
 	
 	<!-- 更新管理员信息 -->
 	<update id="updateAdmins" parameterType="Admin">
-	 	update admin set aname=#{aname},apwd=#{apwd} where aid=#{aid}
+	 	update admin set aname=#{aname},apwd=#{apwd},role=#{role},atime=now() where aid=#{aid}
 	</update>
 </mapper>

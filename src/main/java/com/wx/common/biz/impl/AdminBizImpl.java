@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.wx.common.bean.Admin;
+import com.wx.common.bean.Role;
 import com.wx.common.biz.AdminBiz;
 import com.wx.common.dao.BaseDao;
 
@@ -50,14 +51,23 @@ public class AdminBizImpl implements AdminBiz {
 	}
 
 	@Override
-	public int findUserCount() {
-		int count=(int) baseDao.findOne(Admin.class, "getAdminsCount");
-		return count;
+	public void updateAdmins(Admin admin) {
+		baseDao.update(admin, "updateAdmins");
 	}
 
 	@Override
-	public void updateAdmins(Admin admin) {
-		baseDao.update(admin, "updateAdmins");
+	public List<Role> findMenuByRole(Admin admin) {
+		List<Role> list=new ArrayList<Role>();
+		Role role=new Role();
+		role.setRole(admin.getRole());
+		list=baseDao.findAll(role, "findMenuByRole");
+		return list;
+	}
+
+	@Override
+	public Admin findAdminByAid(Admin admin) {
+		admin=(Admin) baseDao.findOne(admin, "findAdminByAid");
+		return admin;
 	}
 
 }

@@ -32,13 +32,7 @@ public interface UserBiz {
 	 * 查询所有用户
 	 * @return
 	 */
-	public List<UserLx> findAllUser();
-	
-	/**
-	 * 查询所有用户数目
-	 * @return
-	 */
-	public int findUserCount();
+	public List<UserLx> findAllUser(UserLx userLx);
 	
 	/**
 	 * 删除用户
@@ -58,4 +52,10 @@ public interface UserBiz {
 	 * @param userLx
 	 */
 	public void updateUser(UserLx userLx);
+	
+	/**
+	 * 更新用户关注信息
+	 * @param userLx
+	 */
+	public void updateSubUser(UserLx userLx);
 }
