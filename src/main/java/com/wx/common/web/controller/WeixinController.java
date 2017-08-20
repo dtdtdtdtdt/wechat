@@ -5,9 +5,12 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,21 +19,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.wx.common.bean.FirstMenuDb;
 import com.wx.common.bean.KeyReply;
+import com.wx.common.bean.SecondMenuDb;
 import com.wx.common.bean.Sign;
 import com.wx.common.bean.UserLx;
 import com.wx.common.biz.AccessTokenZpBiz;
+import com.wx.common.biz.FirstMenuDbBiz;
 import com.wx.common.biz.KeyReplyBiz;
+import com.wx.common.biz.SecondMenuDbBiz;
 import com.wx.common.biz.SignBiz;
 import com.wx.common.utils.CheckUtil;
 import com.wx.common.utils.CommonDateUtils;
 import com.wx.common.utils.KeyReplyUtils;
+import com.wx.common.utils.SignUtil;
 import com.wx.common.utils.WxSignNewsMsg;
+import com.wx.common.utils.WxWallUtil;
 import com.wx.common.utils.XmlAndMap;
 import com.wx.message.Image;
 import com.wx.message.ImageMessage;
 import com.wx.message.TextMessage;
 import com.wx.user.biz.UserBiz;
+import com.wx.wxwall.entity.User;
+import com.wx.wxwall.websocket.MyWebSocketHandler;
 
 @Controller
 public class WeixinController {
@@ -46,6 +57,17 @@ public class WeixinController {
 	
 	@Resource(name="keyReplyBizImpl")
 	private KeyReplyBiz keyReplyBiz;
+	
+	@Resource(name="firstMenuDbBizImpl")
+	private FirstMenuDbBiz firstMenuDbBiz;
+	
+	@Resource(name="secondMenuDbBizImpl")
+	private SecondMenuDbBiz secondMenuDbBiz;
+	
+	@Resource
+	MyWebSocketHandler handler;
+	//用于微信墙
+	Map<Long, User> users = new HashMap<Long, User>();
 	
 	
 	
@@ -90,6 +112,7 @@ public class WeixinController {
         if("event".equals(msgType)){
         	String message = null;
 	        String Event = map.get("Event");
+	        String EventKey = map.get("EventKey");
 	        //事件为关注
         	if(Event.equals("subscribe")){
         		//关注时添加到数据库
@@ -118,74 +141,81 @@ public class WeixinController {
 		        out.flush();
 		        out.close();
         	}else if(Event.equals("CLICK") ){
-            	//签到
-            	Sign sign = new Sign();
-            	sign.setFromUserName(fromUserName);
-            	System.out.println( sign );
-            	//根据用户名进行数据库查询是否有该用户
-            	Sign s = signBiz.findSignByFromUserName(sign);
-            	//如果没有则是第一次签到
-            	if( s==null ){
-            		Sign newSign = new Sign();
-            		newSign.setFromUserName(fromUserName); //签到人
-            		newSign.setIntegration(1);  //签到总积分
-            		newSign.setSignCount(1);  //签到次数
-            		newSign.setSignHistory(1);  //签到历史   注意！签到时间由数据库自己写
-            		//插入数据
-            		signBiz.addSign(newSign);
-        			//推送签到图文
-        			WxSignNewsMsg.sendWxSignNewsMsg(  newSign , fromUserName, toUserName, out);
-            	}else{
-            		//获取签到次数   总积分  签到时间
-            		Integer signCount = s.getSignCount();   //签到次数
-            		Integer integration = s.getIntegration();  //总积分
-            		Timestamp ts = s.getLastModifytime();   //最近签到时间
+        		//获取key值执行不同的操作    包括一级菜单和二级菜单唉  所以需要先查找所有一级菜单和二级菜单中的key值！
+        		// 获取key和数据库中的对比  在根据数据库中的回复关键字回复内容   所以需要修改表哦
+        		
+        		List<FirstMenuDb>  firstMenuList =  firstMenuDbBiz.findAllFirstMenu();
+        		if( firstMenuList!=null&&firstMenuList.size()>0 ){
+            		for( FirstMenuDb fm :firstMenuList ){
+            			if( EventKey.equals(fm.getKey() ) ){ //fm.getKey()  是数据库中的key	在根据event执行操作
+            	        	KeyReply  kr =  keyReplyBiz.findKeyWords( fm.getEvent()  ); 
+            	        	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+            	        	if(kr!=null){
+            	        		//根据类型判断进行回复
+            	        		switch(kr.getKtype()){
+            	        			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+            		        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+            		        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+            		        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+            		        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
+            	        		}
+            	        	}
+            			}
+            			
+            		}
+        			
+        		}
 
-    				//获取今天的时间戳
-    				Timestamp todayStartTimeStamp = CommonDateUtils.getTodayStartTimeStamp();
-    				//如果今天没有签到过
-    				if(  todayStartTimeStamp.after(ts) ){
-                		//计算是否断签过  根据当天的时间减去数据库中最近签到日期  如果大于1则说明前一天签到过
-                		long dtime = 0;
-        				try {
-        					dtime = CommonDateUtils.StrDateFormat(  s.getLastModifytime().toString() ).getTime();
-        				} catch (ParseException e) {
-        					e.printStackTrace();
+        		//所有二级菜单
+        		SecondMenuDb sm = new SecondMenuDb();
+        		sm.setFid( null );
+        		List<SecondMenuDb>  secondMenuList =  secondMenuDbBiz.findAllSecondMenuByFid(sm);
+        		if( secondMenuList!=null&&secondMenuList.size()>0 ){
+            		for( SecondMenuDb smd :secondMenuList ){
+            			if( EventKey.equals(smd.getKey() ) ){ //在根据event执行操作
+            	        	KeyReply  kr =  keyReplyBiz.findKeyWords( smd.getEvent()  ); 
+            	        	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+            	        	if(kr!=null){
+            	        		//根据类型判断进行回复
+            	        		switch(kr.getKtype()){
+            	        			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+            		        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+            		        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+            		        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+            		        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
+            	        		}
+            	        	}
+            			}
+            		}
+        			
+        		}
+
+        		
+        		
+        		
+        		//为了让其自动识别签到功能  扫描一级菜单是否有签到菜单  
+        		//所有一级菜单
+        		if(firstMenuList!=null&&firstMenuList.size()>0){
+        			for( FirstMenuDb fm :firstMenuList ){
+        				if(fm.getName().equals("签到")){
+        					//点击签到
+        	        		if( EventKey.equals(fm.getKey()) ){
+                        		//签到
+                        		SignUtil.sign(fromUserName, toUserName, signBiz, out);
+                        		break;
+        	        		}
+
         				}
-        				
-        				final  long missDays= (System.currentTimeMillis()- dtime)/(24*60*60*1000);  //连续签到则等于 1
-        				System.out.println( missDays+"--------------------------" );
-        				//如果MissDays == 0  或者 1  则说明前一天已经签到连续签到 等于零表示时间差小于24小时
-        				if( missDays < 2 ){
-        					s.setSignCount( s.getSignCount()+1  ); //连续签到天数加一
-        					s.setSignHistory( s.getSignHistory()+1 ); //签到历史  用于记录总签单天数
-        					//解决积分问题  根据签到天数判断积分问题
-        					switch( signCount+1 ){
-        						case 1:s.setIntegration( s.getIntegration()+1 ); break;
-        						case 2:s.setIntegration( s.getIntegration()+2 ); break;
-        						case 3:s.setIntegration( s.getIntegration()+4 ); break;
-        						case 4:s.setIntegration( s.getIntegration()+8 ); break;
-        						case 5:s.setIntegration( s.getIntegration()+16 ); break;
-        						case 6:s.setIntegration( s.getIntegration()+32 ); break;
-        						case 7:s.setIntegration( s.getIntegration()+64 ); break;    
-        						default : s.setIntegration( s.getIntegration()+64 ); break; 
-        					}
-        				}else{
-        					//否则连续签到次数变为1 
-        					s.setSignCount(1);
-        					s.setIntegration(  s.getIntegration()+1 );
-        				}			
-        				//更新数据库
-        				signBiz.updateSign(s);
-            			//推送签到图文
-            			WxSignNewsMsg.sendWxSignNewsMsg(s, fromUserName, toUserName, out);
-    				}else{  //今天签到过了！
-            			//推送签到文本
-            			WxSignNewsMsg.alreadySignNewsMsg(s, fromUserName, toUserName, out);
-    				}
-            	}
+        			}
+        		}
+
+
+        		
 			}
-        }else if(msgType.equals("text")){
+        }else if(msgType.equals("text")){ // 文本信息
+        	//首先判断该用户是否进入微信墙模式   一会搞定...
+        	
+        	
         	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
         	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
         	if(kr!=null){
@@ -195,22 +225,23 @@ public class WeixinController {
 	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
 	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
 	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
-        			
+	        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
         		}
-
-        		
         	}
-
-
-        		
-        		
-        		
+        	//如果发送的文本是  微信墙则绑定微信墙功能！  
+        	//处理思路   新建一张表  用于存取上墙的用户   以后就可以抽奖操作
+        	if( content.equals("微信墙") ){
+        		WxWallUtil.sendServiceMsg(fromUserName, accessTokenZpBiz);
+        	}
+        	//存在session中
+    		ServletContext application = req.getServletContext();
+    		application.setAttribute("my", content);
+    	
+        
+    		
 
         	
 
-        	
-        	
-        	
         }
 	}
 }

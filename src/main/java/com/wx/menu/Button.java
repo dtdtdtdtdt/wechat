@@ -9,6 +9,14 @@ public class Button implements Serializable {
 	
 	private String name;
 	private String type;
+	private String url;
+	
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	private Button [] sub_button;
 	
 	public String getName() {

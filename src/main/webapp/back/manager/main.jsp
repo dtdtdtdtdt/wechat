@@ -25,11 +25,30 @@
 				},
 				{
 
+					"text" : "关键字管理",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgManager.jsp'/>"
+					}
+				},
+				{
+
 					"text" : "关键字回复设置",
 					"attributes" : {
 						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgToReply.jsp'/>"
 					}
-				} ];
+				},{
+
+					"text" : "自定义菜单管理",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/menuManager.jsp'/>"
+					}
+				},{
+
+					"text" : "微信墙",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/wxwall.jsp'/>"
+					}
+				}];
 
 		var treeDataManage = [ 
 			{
@@ -99,11 +118,14 @@
 </head>
 <body class="easyui-layout layout panel-noscoll">
 	<div data-options="region:'north'" style="height: 50px;">
-		<div style="font-size:25px;height:auto;text-align:center">
+		<div style="float:left;">
+			<embed style="height:45px;" src="swf/style_time.swf"></embed>
+		</div>
+		<div style="font-size:25px;float:left;margin-left:350px;margin-top:5px">
 			微信后台管理界面
-			<div style="font-size:15px;float:right;margin-right:5px;margin-top:10px;">
+		</div>
+		<div style="font-size:15px;float:right;margin-right:5px;margin-top:10px;">
 				欢迎您，${admin.aname }&nbsp;&nbsp;<a href="adminLogout.action">退出</a>
-			</div>
 		</div>
 	</div>
 	<div data-options="region:'south'" style="height: 50px;">
@@ -111,7 +133,6 @@
 			刘翔、丁婷、朱鹏 &copy; 版权所有
 		</div>
 	</div>
-	<div data-options="region:'east',split:true,state:closed" title="East" style="width: 50px;">右边</div>
 	<div data-options="region:'west',split:true,state:closed" title="菜单" style="width: 150px;">
 		<div class="easyui-accordion" style="width: 143px; height: 300px;">
 
@@ -137,7 +158,7 @@
 	<div data-options="region:'center',title:'操作显示页面'">
 		<!-- tabs区，有很多的tab -->
 		<div id="mainTt" class="easyui-tabs" data-options="fit:true,border:false">
-			<div title="欢迎首页">欢迎您，源辰信息！</div>
+			<div title="欢迎首页">欢迎您！</div>
 		</div>
 	</div>
 

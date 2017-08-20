@@ -1,5 +1,7 @@
 package com.wx.common.biz.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -33,6 +35,35 @@ public class KeyReplyBizImpl implements KeyReplyBiz {
 			return kr;
 		}
 		return null;	
+	}
+	
+	//查找所有关键字
+	@Override
+	public List<KeyReply> findAllKeyWords() {
+		List<KeyReply> list = baseDao.findAll(new KeyReply(), "findAllKeyWords");
+		if( list!=null&&list.size()>0){
+			return list;
+		}
+		return null;
+	}
+	
+	//查找关键字数量  就是查找所有关键字！
+	@Override
+	public int findKeyWordsCount() {
+
+		List<KeyReply> list = baseDao.findAll(new KeyReply(), "findAllKeyWords");
+		if( list!=null&&list.size()>0){
+			return list.size();
+		}
+
+		return 0;
+	}
+	
+	//根据kid删除关键字
+	@Override
+	public void deleteKeyWords(KeyReply KeyReply) {
+		baseDao.del(KeyReply, "deleteKeyWordsByKid");
+		
 	}
 
 }

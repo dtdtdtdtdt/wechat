@@ -19,6 +19,7 @@ public class CommonDateUtils implements Serializable {
 	 * @param str
 	 * @return
 	 * @throws ParseException 
+	 * 形参样式2017-08-13 00:00:00.0
 	 */
 	public static Date StrDateFormat(String str) throws ParseException{
 		String s = str.replaceAll("-", " ").replace(".0", "");
@@ -36,6 +37,17 @@ public class CommonDateUtils implements Serializable {
       Timestamp t = new Timestamp( c.getTime().getTime() );
       return t;
 	}
-	
+	//从数据库中取出获取当天日期凌晨时间戳
+	//str样式形参样式2017-08-13 00:00:00.0
+	public static long getDateBaseTimeStamp(String str) throws ParseException{
+      String [] s =  str.split(" ");
+      String st = s[0];  //2017-08-13
+      DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+      Date date = df.parse(  st );
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(date);
+      long timestamp = cal.getTimeInMillis();
+      return timestamp;
+	}
 	
 }

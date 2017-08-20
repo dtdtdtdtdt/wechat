@@ -29,9 +29,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 
-import com.jspsmart.upload.Request;
-import com.jspsmart.upload.SmartUpload;
-import com.jspsmart.upload.SmartUploadException;
 import com.wx.common.bean.KeyReply;
 import com.wx.common.biz.AccessTokenZpBiz;
 import com.wx.common.biz.KeyReplyBiz;
@@ -52,39 +49,64 @@ public class KeyMsgToReplyController {
 	@Resource(name="accessTokenZpBizImpl")
 	private AccessTokenZpBiz accessTokenZpBiz;
 	
-	//文本微信关键字设置回复
-	@RequestMapping(value="/back/keyMsgToReply.action")
-	public JsonModel keyMsgToReply(KeyReply keyReply,HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException, SmartUploadException{
+	//微信关键字设置回复  文本和图文
+	@RequestMapping(value="/back/keyMsgToReplyTexeAndNews.action")
+	public JsonModel keyMsgToReplyImg(KeyReply keyReply){
 		JsonModel jm = new JsonModel();
-		//获取关键字
-//		System.out.println( keyReply.getKeywords()+"\n"+keyReply.getContent() );
-		//设置文本类型为0
-		keyReply.setKtype(0);
 		
-		boolean b = keyReplyBiz.addKeyWords(keyReply);
-		if( b ){
-			jm.setCode(1);		
-		}else{
-			jm.setCode(0);
-			jm.setMsg("增加失败！");
+//		System.out.println(  keyReply );
+		
+		//获取类型的不同
+		String msgType = null;
+		switch(keyReply.getKtype()){
+		//用户操作为设置文本，图文 操作完图文应该把图文的信息清空
+		case 0:msgType = "text"; 
+			keyReply.setTitle("");
+			keyReply.setDescription("");
+			keyReply.setPicUrl("");
+			keyReply.setUrl("");
+			//文本直接存数据库
+			keyReplyBiz.addKeyWords(keyReply);
+			jm.setCode(1);
+			 return jm;
+		
+		case 4:msgType = "news"; 
+			//把文本内容清空
+			keyReply.setContent("");
+			//文本直接存数据库
+			keyReplyBiz.addKeyWords(keyReply);
+			jm.setCode(1);
+			 return jm;
+
 		}
-		jm.setCode(1);	
 		return jm;
 	}
 	
 	
-	//图片,视频,语音微信关键字设置回复
-	@RequestMapping(value="/back/keyMsgToReplyImg.action")
-	public JsonModel keyMsgToReplyImg(KeyReply keyReply,HttpServletRequest request,HttpServletResponse resp,@RequestParam("file")CommonsMultipartFile file2) throws ServletException, IOException, SmartUploadException, ParseException, java.text.ParseException, KeyManagementException, NoSuchAlgorithmException, NoSuchProviderException{
+	
+	
+	
+	//微信关键字设置回复  图片 语音 视频
+	@RequestMapping(value="/back/keyMsgToReply.action")
+	public JsonModel keyMsgToReplyImg(KeyReply keyReply,HttpServletRequest request,HttpServletResponse resp,@RequestParam("file")CommonsMultipartFile file2) throws ServletException,IOException, ParseException, java.text.ParseException, KeyManagementException, NoSuchAlgorithmException, NoSuchProviderException{
 		JsonModel jm = new JsonModel();
 		
-//		System.out.println( keyReply.getKeywords()+ keyReply.getKtype());
+		System.out.println( "文本"+keyReply.getContent() );
+		System.out.println( "新新闻"+keyReply.getPicUrl()+ keyReply.getUrl());
+		//媒体id设置为全局变量
+		String mediaId = null;
+		
+		
+		
 		//文件大小必须限制
 		long fileSize = file2.getSize();
 		//获取类型的不同
 		String msgType = null;
 		switch(keyReply.getKtype()){
 			case 1:msgType = "image";
+					keyReply.setTitle("");
+					keyReply.setDescription("");
+			
 					if(fileSize>2097152){
 						jm.setCode(0);
 						jm.setMsg("文件大小大于2M,请压缩文件大小");
@@ -92,6 +114,8 @@ public class KeyMsgToReplyController {
 					}
 				  break;
 			case 2:msgType = "voice";
+					keyReply.setTitle("");
+					keyReply.setDescription("");
 					if(fileSize>2097152){
 						jm.setCode(0);
 						jm.setMsg("文件大小大于2M,请压缩文件大小");
@@ -106,7 +130,10 @@ public class KeyMsgToReplyController {
 					}
 				  break;
 		}
+		
 
+		
+		
 		
         long  startTime=System.currentTimeMillis();
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
@@ -137,7 +164,7 @@ public class KeyMsgToReplyController {
                    file.transferTo(new File(path)); 
                    //在上传到微信服务器！
                    String access_token = GetAccessToken.getAT(accessTokenZpBiz);
-                   String mediaId = WeixinUtil.upload(path, access_token, msgType);
+                   mediaId = WeixinUtil.upload(path, access_token, msgType);
                    //此id需要存数据库
                    System.out.println( "上传完成"+mediaId );
                    keyReply.setMediaId(mediaId);
@@ -147,8 +174,11 @@ public class KeyMsgToReplyController {
                }  
            }
        }
+
+       
+       
        long  endTime=System.currentTimeMillis();
-       System.out.println("方法三的运行时间："+String.valueOf(endTime-startTime)+"ms");
+       System.out.println("运行时间："+String.valueOf(endTime-startTime)+"ms");
        if( endTime>=0 ){
     	   jm.setCode(1);
        }else{

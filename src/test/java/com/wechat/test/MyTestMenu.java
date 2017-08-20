@@ -19,7 +19,8 @@ import net.sf.json.JSONObject;
 public class MyTestMenu {
 	public static void main(String[] args) throws ParseException, IOException {
 		//测试查询菜单
-		String access_token = "yf390OkgYKXcvwYWi5kaXlxtRjHwNGIGZUZR-PCIhLxQbukwffbH_j9eA0jTXzh9DYw5zMrfLMhaZ3Usjrs-A_JBtcqMs5DeBdhmSO2n7__8HDkacZbiK6zZhrD366eyUUMbAGALLD";
+		String access_token = "FugWynNeVVH5TaY_9Bn-4z3JpagQz0veQS19zr_GpMeEWSo1YspLa6idSjaO0olmZMoFuiikNYRETGtDogNNYZx-WP0lb9dRLvs7hAY85-DltDe4GwIKojLV61rWuOOoTNAfACAOIV";
+
 		String url = WeixinUtil.QUERY_MENU_URL.replace("ACCESS_TOKEN", access_token);
 		JSONObject jo = WeixinUtil.doGetStr(url);
 		
@@ -93,34 +94,13 @@ public class MyTestMenu {
                         bt.add(vb);
                         
                     }  
-                    //存入Button中
-                    
-                    b.setSub_button(  new Button[]{cb,vb} );     
-                    
-                   
-                   
                     System.out.println("子菜单name:"+sub_name+"|type:"+type+"|str:"+str);  
                   
                 }  
             }  
            
         } 
-        System.out.println( clickButton  );
-        ClickButton c = clickButton.get(0);
-        System.out.println( c.getName()+c.getType()+c.getKey() );
-        
-        System.out.println( viewButton );
-        ViewButton v = viewButton.get(0);
-        System.out.println( v.getName()+v.getType()+v.getUrl() );
-        
-        System.out.println( bt.size() );
-        for( int i=0;i<bt.size();i++ ){
-        	System.out.println( bt.get(i).getName() );
-        	
-        	Button b = bt.get(i);
-        	System.out.println( b );
-        	
-        }
+
 			
 
 		

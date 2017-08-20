@@ -29,8 +29,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	 -->
 	
+	<!-- 查找所有关键字    包括查找关键字数量  就是查找所有关键字！-->
+	<select id="findAllKeyWords"   resultType="KeyReply">
+		
+	select * from keyreply
+	</select>
 
+	<!-- //根据kid删除关键字 -->
+	<delete id="deleteKeyWordsByKid" parameterType="KeyReply">
+		delete  from keyreply where kid =#{kid}
+	</delete>
 	
-
 
 </mapper>

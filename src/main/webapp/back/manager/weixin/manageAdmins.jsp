@@ -23,6 +23,7 @@
 				$.messager.alert("错误","操作失败");
 			},
 			
+			//双击编辑
 			onDblClickCell:function(rowIndex,field,value){
 				if(editFlag != undefined){
 					$("#manTypeTable").datagrid('endEdit',editFlag);

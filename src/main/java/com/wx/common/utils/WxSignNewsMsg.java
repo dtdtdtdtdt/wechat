@@ -49,7 +49,7 @@ public class WxSignNewsMsg implements Serializable {
     	News news = new News();
     	news.setTitle("签到成功,获得"+( todayCount )+"积分");
     	news.setDescription("明天签到将获得"+( tomorrowCount )+"积分,加油吧！\n\n累计签到"+( sign.getSignCount() )+"天\n\n目前"+( sign.getIntegration() )+"积分");
-    	news.setPicUrl("http://119.23.65.165/weixin/images/my.jpg");
+    	news.setPicUrl("http://campus.163.com/campus/img/netease/introduction/163.jpg");
     	news.setUrl("http://campus.163.com/#/home");
     	List<News> list = new ArrayList<News>();
     	list.add(news);

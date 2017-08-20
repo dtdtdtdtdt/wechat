@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.FirstMenuDbMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	
+	<!-- 插入一级菜单 -->
+	<insert id="addFirstMenu" parameterType="FirstMenuDb" useGeneratedKeys="true" keyProperty="fid">
+		insert into firstmenu(`type`,name,`key`,url,event) values(#{type},#{name},#{key},#{url},#{event})
+	</insert>
+	
+	<!-- 查询所有一级菜单 也可以用于查询一级菜单数量  -->
+	<select id="findAllFirstMenu" resultType="FirstMenuDb">
+		select * from firstmenu
+	</select>
+	
+	
+	<!-- 根据fid查找一级菜单名 -->
+	<select id="findFirstMenuByFid" resultType="FirstMenuDb" parameterType="FirstMenuDb">
+		select * from firstmenu where fid=#{fid}
+	</select>
+	
+	
+	<!-- 查询两张表关联数据 -->
+	<select id="findAllMenu" parameterType="FirstMenuDb"   resultType="FirstMenuDb">
+		select f.name,f.type,f.key,f.url,s.name,s.type,s.url from firstmenu f 
+		left join secondmenu s on f.fid=s.fid
+	</select>
+
+	<!-- 根据fid删除一级菜单名 -->
+	<delete id="deleteFirstMenuByFid"  parameterType="FirstMenuDb" >
+		delete from firstmenu where fid=#{fid}
+	</delete>
+
+
+
+</mapper>

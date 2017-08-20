@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wx.common.bean.AccessTokenZp;
 import com.wx.common.biz.AccessTokenZpBiz;
+import com.wx.common.biz.FirstMenuDbBiz;
+import com.wx.common.biz.SecondMenuDbBiz;
 import com.wx.common.utils.GetAccessToken;
 import com.wx.common.utils.TransFormUtil;
 import com.wx.common.utils.WeixinUtil;
@@ -41,6 +43,23 @@ public class MenuController {
 	
 	@Resource(name="accessTokenZpBizImpl")
 	private AccessTokenZpBiz accessTokenZpBiz;
+	
+	@Resource(name="firstMenuDbBizImpl")
+	private FirstMenuDbBiz firstMenuDbBiz;
+	
+	@Resource(name="secondMenuDbBizImpl")
+	private SecondMenuDbBiz secondMenuDbBiz;
+	
+	
+	
+	//生成菜单
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//查询公众号菜单
@@ -142,22 +161,6 @@ public class MenuController {
 	        ViewButton v = viewButton.get(0);
 	        sesion.setAttribute("viewButton2", v);
 	        
-//	        System.out.println( clickButton  );
-//	        ClickButton c = clickButton.get(0);
-//	        System.out.println( c.getName()+c.getType()+c.getKey() );
-//	        
-//	        System.out.println( viewButton );
-//	        ViewButton v = viewButton.get(0);
-//	        System.out.println( v.getName()+v.getType()+v.getUrl() );
-//	        
-//	        System.out.println( bt.size() );
-//	        for( int i=0;i<bt.size();i++ ){
-//	        	System.out.println( bt.get(i).getName() );
-//	        	
-//	        	Button b = bt.get(i);
-//	        	System.out.println( b );
-//	        	
-//	        }
 				
 		
 			
@@ -257,8 +260,7 @@ public class MenuController {
 		JSONObject jo2;
 		try {
 			jo2 = WeixinUtil.doPostStr(  url , json);
-			System.out.println( jo2 );
-			
+			System.out.println( jo2 );	
 			jm.setCode(1);
 			
 		} catch (Exception e) {

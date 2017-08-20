@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.SecondMenuDbMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	
+	
+	<!-- 排序条件的拼接 -->
+	<sql id="byFid">
+		<if test="fid!=null and fid!=''">
+			where fid=#{fid}
+		</if>
+	</sql>
+	
+	
+	<!-- 插入2级菜单 -->
+	<insert id="addSecondMenu" parameterType="SecondMenuDb">
+		insert into secondmenu(`type`,name,`key`,url,fid,event) values(#{type},#{name},#{key},#{url},#{fid},#{event})
+	</insert>
+	
+	<!-- 查询所有二级菜单根据fid 也可以直接查找所有 -->
+	<select id="findAllSecondMenuByFid" parameterType="SecondMenuDb" resultType="SecondMenuDb">
+		select * from secondmenu <include refid="byFid"/>
+	</select>
+
+	<!-- 查询所有二级菜单根据fid的数量  -->
+	<select id="findAllSecondMenuByFidCount" parameterType="SecondMenuDb" resultType="SecondMenuDb" >
+		select count(*) from secondmenu <include refid="byFid"/>
+	</select>
+	
+	<!-- 删除二级菜单 根据sid -->
+	<delete id="deleteSecondBySid" parameterType="SecondMenuDb" >
+		delete from secondmenu where sid = #{sid}
+	</delete>
+	
+	
+	<select id="findSecondCountGroupBy" resultType="SecondMenuDb">
+		select fid,count(*)as `count` from secondmenu group by fid
+	</select>
+	
+	
+
+</mapper>

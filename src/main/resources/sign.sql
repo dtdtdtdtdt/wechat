@@ -7,6 +7,16 @@ drop table sign
 --最后修改时间（签到）
 --签到历史    用来记录签到天数对应的积分
 --ext预留
+drop table testt
+create table testt(
+	tid int primary key auto_increment,
+	timet date,
+	timett datetime
+)
+insert into testt(timet,timett) values(now(),now())
+select * from testt
+
+
 create table sign(
 	sid int primary key auto_increment,
 	fromUserName varchar(50),   		

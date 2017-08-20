@@ -2,11 +2,15 @@ package com.wx.common.utils;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.wx.common.bean.KeyReply;
 import com.wx.message.Image;
 import com.wx.message.ImageMessage;
+import com.wx.message.News;
+import com.wx.message.NewsMessage;
 import com.wx.message.TextMessage;
 import com.wx.message.Video;
 import com.wx.message.VideoMessage;
@@ -83,6 +87,30 @@ public class KeyReplyUtils implements Serializable{
         out.close();
 	}
 	
+	//回复图文信息
+	public static void keyReplyNews(KeyReply kr,String toUserName,String fromUserName,PrintWriter out  ){
+		News n = new News();
+		n.setTitle(kr.getTitle());
+		n.setDescription(kr.getDescription());
+		n.setUrl(kr.getUrl());
+		n.setPicUrl(kr.getPicUrl());
+		
+		List<News> articles = new ArrayList<News>();
+		articles.add(n);
+		
+		NewsMessage nm = new NewsMessage();
+		nm.setArticleCount(1);
+		nm.setArticles(articles);
+		nm.setCreateTime(new Date().getTime());
+		nm.setMsgType("news");
+		nm.setFromUserName(toUserName);
+		nm.setToUserName(fromUserName);
+		
+		String message = XmlAndMap.newsMessageToXml(nm);
+        out.print(message);
+        out.flush();
+        out.close();
+	}
 	
 	
 }
