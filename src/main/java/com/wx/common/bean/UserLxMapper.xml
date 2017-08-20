@@ -12,8 +12,11 @@
 	</select>
 
 	<!-- 查询总的数目 -->
-	<select id="findUserCount" resultType="int">
-		select count(*) from users
+	<select id="findUserCount" resultType="int" parameterType="UserLx">
+		select count(*) from users where 1=1
+		<if test="subscribe != null">
+			and subscribe=#{subscribe}
+		</if>
 	</select>
 	
 	<!-- 删除数据库用户信息 -->
@@ -27,8 +30,11 @@
 	</select>
 	
 	<!-- 查询所有用户 -->
-	<select id="findAllUser" resultType="UserLx">
-		select * from users
+	<select id="findAllUser" resultType="UserLx" parameterType="UserLx">
+		select * from users where 1=1
+		<if test="subscribe != null">
+			and subscribe=#{subscribe}
+		</if>
 	</select>
 
 	<!-- 添加用户 返回用户对象 -->
@@ -47,5 +53,10 @@
 		country=#{country},province=#{province},city=#{city},language=#{language},headimgurl=#{headimgurl},
 		remark=#{remark},groupid=#{groupid},tagid_list=#{tagid_list}
 		where openid=#{openid}
+	</update>
+	
+	<!-- 更新用户关注信息 -->
+	<update id="updateSubUser" parameterType="UserLx">
+		update users set subscribe=0 where openid=#{openid}
 	</update>
 </mapper>

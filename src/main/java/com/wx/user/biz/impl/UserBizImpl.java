@@ -100,16 +100,10 @@ public class UserBizImpl implements UserBiz {
 	}
 
 	@Override
-	public List<UserLx> findAllUser() {
+	public List<UserLx> findAllUser(UserLx userLx) {
 		List<UserLx> userList=new ArrayList<UserLx>();
-		userList=baseDao.findAll(UserLx.class, "findAllUser");
+		userList=baseDao.findAll(userLx, "findAllUser");
 		return userList;
-	}
-
-	@Override
-	public int findUserCount() {
-		int count=(int) baseDao.findOne(UserLx.class, "findUserCount");
-		return count;
 	}
 
 	@Override
@@ -131,6 +125,12 @@ public class UserBizImpl implements UserBiz {
 	@Override
 	public void updateUser(UserLx userLx) {
 		baseDao.update(userLx, "updateUser");
+	}
+
+	@Override
+	public void updateSubUser(UserLx userLx) {
+		baseDao.update(userLx, "updateSubUser");
+		
 	}
 
 }

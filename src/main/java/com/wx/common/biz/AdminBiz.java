@@ -3,6 +3,7 @@ package com.wx.common.biz;
 import java.util.List;
 
 import com.wx.common.bean.Admin;
+import com.wx.common.bean.Role;
 
 public interface AdminBiz {
 	
@@ -31,16 +32,24 @@ public interface AdminBiz {
 	 * @param admin
 	 */
 	public void deleteAdmins(Admin admin);
-
-	/**
-	 * 查询所有用户数目
-	 * @return
-	 */
-	public int findUserCount();
 	
 	/**
 	 * 根据aid更新管理员
 	 * @param admin
 	 */
 	public void updateAdmins(Admin admin);
+	
+	/**
+	 * 根据角色名查询权限
+	 * @param admin
+	 * @return
+	 */
+	public List<Role> findMenuByRole(Admin admin);
+	
+	/**
+	 * 根据aid查询用户信息
+	 * @param admin
+	 * @return
+	 */
+	public Admin findAdminByAid(Admin admin);
 }

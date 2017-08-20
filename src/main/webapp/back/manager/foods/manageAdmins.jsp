@@ -1,23 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../head.jsp" %>
-<%@ page import="java.util.*,com.wx.common.bean.*" %>
+
 <script type="text/javascript">
 	var editFlag=undefined;
 	$(function(){
-		<% 
-			List<Role> list=(List<Role>)session.getAttribute("roleList");
-			if(list!=null){
-				String str="";
-				for(Role r:list){
-					str+="{\"text\":\""+r.getRole()+"\"},";
-				}
-		%>
-		var roleName=[<%=str%>];
-		<%
-			}
-		%>
-		
-		
+		var roleName=[{"text": "CHINA" }];
 		$('#manTypeTable').datagrid({
 			url:'back/findAdmins.action',   //查询时加载的URL
 			pagination:true,   //显示分页
@@ -36,7 +23,6 @@
 				$.messager.alert("错误","操作失败");
 			},
 			
-			//双击编辑
 			onDblClickCell:function(rowIndex,field,value){
 				if(editFlag != undefined){
 					$("#manTypeTable").datagrid('endEdit',editFlag);
@@ -55,42 +41,28 @@
 				iconCls:'icon-add',
 				handler:function(){
 					$('#dlg').dialog('open').dialog('center').dialog('setTitle','添加管理员');
-					$.ajax({
-						type : "POST",
-						url : "back/reloadRole.action",
-						dataType : "JSON",
-						success : function(data) {
-							if (data.code == 0) {
-								alert("加载角色失败！" + data.msg);
-							}
-						}
-					});
 				}
 			},'-',{
 				text:"删除",
 				iconCls:'icon-remove',
 				handler:function(){
-					$.messager.confirm('温馨提示', '确定删除用户?', function(r) {
-		                if (r) {
-		                	var row=$("#manTypeTable").datagrid('getSelected');
-							if (row!=null){
-								$.ajax({
-									type : "POST",
-									data : "aid="+row.aid,
-									url : "back/deleteAdmins.action",
-									dataType : "JSON",
-									success : function(data) {
-										if (data.code == 1) {
-											alert("删除成功！");
-											location.href = "back/manager/weixin/manageAdmins.jsp";
-										} else {
-											alert("删除失败！" + data.msg);
-										}
-									}
-								});
+					var row=$("#manTypeTable").datagrid('getSelected');
+					if (row!=null){
+						$.ajax({
+							type : "POST",
+							data : "aid="+row.aid,
+							url : "back/deleteAdmins.action",
+							dataType : "JSON",
+							success : function(data) {
+								if (data.code == 1) {
+									alert("删除成功！");
+									location.href = "back/manager/weixin/manageAdmins.jsp";
+								} else {
+									alert("删除失败！" + data.msg);
+								}
 							}
-		                }  
-		            });
+						});
+					}
 				}
 			},'-',{
 				text:"保存",
@@ -223,11 +195,11 @@
 			<br>
 			<div>
 				<label>&nbsp;角  色  名：</label>
-					<select class="easyui-combobox" name="role">
-						<c:forEach items="${roleList}" var="role">
+					<c:forEach items="${roleList}" var="role">
+						<select class="easyui-combobox" name="role">
 							<option value="${role.role }">${role.role }</option>
-						</c:forEach>
-					</select>
+						</select>
+					</c:forEach>
 			</div><br>
 			<div>
 				<label>&nbsp;账  户  名：</label>
