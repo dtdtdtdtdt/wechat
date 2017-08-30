@@ -18,11 +18,7 @@ String basePath =request.getScheme()+"://"+request.getServerName()+":"+request.g
 <script type="text/javascript" src="back/manager/easyui15/jquery.min.js"></script>
 <script type="text/javascript" src="back/manager/easyui15/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="back/manager/easyui15/jquery.edatagrid.js"></script>
-<<<<<<< HEAD
-<script type="text/javascript">
 
-</script>
-=======
 
 <script type="text/javascript">
 //关闭所有的tab  
@@ -41,4 +37,3 @@ function closeAll(){
       }  
 }  
 </script>
->>>>>>> branch 'master' of https://github.com/dtdtdtdtdt/wechat.git

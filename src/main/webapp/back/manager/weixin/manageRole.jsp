@@ -6,16 +6,12 @@
 	$(function(){
 		$('#manTypeTable').datagrid({
 			url:'back/findRoles.action',   //查询时加载的URL
-			pagination:true,   //显示分页
-			pageSize:50,       //默认分页的条数
 			fitColumns:true,   //自适应列
-			fit:true,   	   //自动补全
+			//fit:true,   	   //自动补全
 			loadMsg:"正在为您加载数据。。。",
 			idField:"rid",		//标识，会记录我们选中的一行的ID，不一定是ID，通常是主键
 			rownumbers:"true",	 //显示行号
 			nowrap:"true",		//不换行显示
-			sortName:"rid",		//排序的列 这个参数会传到后台的servlet上，所以要有后台对应的接收
-			sortOrder:"desc",   //排序方式
 			singleSelect:true,
 			//以上的四种增删改查操作，只要失败，都会回调这个onError
 			onError:function(a,b){
@@ -30,7 +26,7 @@
 					
 					$('#menuTable').datagrid({
 						url:'back/findMenu.action',
-						fitColumns:true,   //自适应列
+						//fitColumns:true,   //自适应列
 						loadMsg:"正在为您加载数据。。。",
 						idField:"mid",		//标识，会记录我们选中的一行的ID，不一定是ID，通常是主键
 						rownumbers:"true",	 //显示行号
@@ -125,33 +121,37 @@
 		// 返回被选中的行 然后集成的其实是 对象数组  
         var row = $('#menuTable').datagrid('getSelections');
 		var role=$("#role").val();
-        var i = 0;  
-        var strTitle = "";
-        var strMenu = "";
-        for(i;i<row.length;i++){
-            strTitle += row[i].mtitle;
-            strMenu += row[i].menu;
-            if(i < row.length-1){
-            	strTitle += ',';
-            	strMenu += ',';
-            }else{
-                break;  
+        if(role!=""&&row!=""){
+        	var i = 0;  
+            var strTitle = "";
+            var strMenu = "";
+            for(i;i<row.length;i++){
+                strTitle += row[i].mtitle;
+                strMenu += row[i].menu;
+                if(i < row.length-1){
+                	strTitle += ',';
+                	strMenu += ',';
+                }else{
+                    break;  
+                }
             }
+    		$.ajax({
+    			type : "POST",
+    			data : "role="+role+"&strTitle="+strTitle+"&strMenu="+strMenu,
+    			url : "back/addRole.action",
+    			dataType : "JSON",
+    			success : function(data) {
+    				if (data.code == 1) {
+    					alert("添加成功！");
+    					location.href = "back/manager/weixin/manageRole.jsp";
+    				} else {
+    					alert("添加失败！" + data.msg);
+    				}
+    			}
+    		});
+        }else{
+        	alert('角色名和权限不能为空！');
         }
-		$.ajax({
-			type : "POST",
-			data : "role="+role+"&strTitle="+strTitle+"&strMenu="+strMenu,
-			url : "back/addRole.action",
-			dataType : "JSON",
-			success : function(data) {
-				if (data.code == 1) {
-					alert("添加成功！");
-					location.href = "back/manager/weixin/manageRole.jsp";
-				} else {
-					alert("添加失败！" + data.msg);
-				}
-			}
-		});
 	}
 	
 </script>

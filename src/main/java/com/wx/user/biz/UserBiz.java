@@ -22,6 +22,11 @@ public interface UserBiz {
 	public void refreshUser();
 	
 	/**
+	 * 查询所有用户数目
+	 */
+	public int findUserCount(UserLx userLx);
+	
+	/**
 	 * 从微信服务器获取单个用户
 	 * @param wechatUser
 	 * @return

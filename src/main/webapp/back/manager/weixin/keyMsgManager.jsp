@@ -194,7 +194,7 @@
 							//clearForm();
 
 						}else{
-							alert("失败");
+							alert("失败"+data.msg);
 						}
 					} 
 			}); 

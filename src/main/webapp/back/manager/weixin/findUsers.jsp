@@ -21,13 +21,22 @@
 				$.messager.alert("错误","操作失败");
 			},
 			
+			rowStyler:function(index,row){   
+		        if (row.subscribe==0){   
+		            return 'background-color:red;color:white;';   
+		        }   
+		    },  
+			
 			toolbar:[{
 				text:"导出Excel",
 				iconCls:'icon-save',
-				handler:function(){   
+				handler:function(){  
                      var url = '${pageContext.request.contextPath}/toExcel.action';  
                      window.location.href=url; 
 				}
+			},"-",{
+				text:"已关注人数:",
+				iconCls:'icon-ok'
 			}],
 			
 			columns:[[{

@@ -6,6 +6,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -91,8 +92,6 @@ public class KeyMsgToReplyController {
 	public JsonModel keyMsgToReplyImg(KeyReply keyReply,HttpServletRequest request,HttpServletResponse resp,@RequestParam("file")CommonsMultipartFile file2) throws ServletException,IOException, ParseException, java.text.ParseException, KeyManagementException, NoSuchAlgorithmException, NoSuchProviderException{
 		JsonModel jm = new JsonModel();
 		
-		System.out.println( "文本"+keyReply.getContent() );
-		System.out.println( "新新闻"+keyReply.getPicUrl()+ keyReply.getUrl());
 		//媒体id设置为全局变量
 		String mediaId = null;
 		
@@ -158,13 +157,22 @@ public class KeyMsgToReplyController {
                {
             	  
             	   String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            	   //需要修改路径   尽量设置为c盘
-                   String path="G:/test/"+fileName+last;
+            	 
+				   //取出tomcat路径
+				   Calendar c=Calendar.getInstance();
+				   String tomcatdir=request.getRealPath("/");
+				   File tomcatFile=new File(tomcatdir);
+				   File webapppath=tomcatFile.getParentFile();
+					
+				   File picpath=new File(webapppath,"wxpic"+File.separator+c.get(Calendar.YEAR)+
+							File.separator+(c.get(Calendar.MONTH)+1)+File.separator+fileName+last);
+            	   String filepath = picpath.toString();
+            	   
                    //上传 到指定磁盘
-                   file.transferTo(new File(path)); 
+                   file.transferTo(new File(filepath)); 
                    //在上传到微信服务器！
                    String access_token = GetAccessToken.getAT(accessTokenZpBiz);
-                   mediaId = WeixinUtil.upload(path, access_token, msgType);
+                   mediaId = WeixinUtil.upload(filepath, access_token, msgType);
                    //此id需要存数据库
                    System.out.println( "上传完成"+mediaId );
                    keyReply.setMediaId(mediaId);

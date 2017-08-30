@@ -288,7 +288,7 @@
 					width:20
 				},{
 					field:'fid',  //这些属性对象Javabean中的名字，注意大小写
-					title:'所属一级菜单',
+					title:'所属一级菜单编号',
 					width:20,
 					align:'center'
 	

@@ -9,99 +9,25 @@
 					"attributes" : {
 						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp' />"
 					}
-				},
-<<<<<<< HEAD
-				{
-					"text" : "角色管理",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp'/>"
-=======
-				{
+				},{
 					"text" : "角色管理",
 					"attributes" : {
 						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageRole.jsp' />"
->>>>>>> branch 'master' of https://github.com/dtdtdtdtdt/wechat.git
 					}
 				}];
 
-<<<<<<< HEAD
-					"text" : "自定义菜单",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/addMenu.jsp'/>"
-					}
-				},
-				{
-
-					"text" : "关键字管理",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgManager.jsp'/>"
-					}
-				},
-				{
-
-					"text" : "关键字回复设置",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgToReply.jsp'/>"
-					}
-				},{
-
-					"text" : "自定义菜单管理",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/menuManager.jsp'/>"
-					}
-				},{
-
-					"text" : "微信墙",
-					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/wxwall.jsp'/>"
-					}
-				}];
-
-		var treeDataManage = [ 
-=======
 		var messageTree = [
->>>>>>> branch 'master' of https://github.com/dtdtdtdtdt/wechat.git
 			{
-			"text" : "关注消息",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			}, {
-
-			"text" : "所有消息",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			}, {
-
-			"text" : "添加视频",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			}, {
-
-			"text" : "添加音乐",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			}, {
-
-			"text" : "添加图片",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			}, {
-
-			"text" : "添加文本",
-			"attributes" : {
-				"url" : "<iframe width='100%' height='100%' />"
-				}
-			},{
-
-				"text" : "关键字回复",
+				"text" : "关注消息",
 				"attributes" : {
 					"url" : "<iframe width='100%' height='100%' />"
-					}
+				}
+			},
+			{
+				"text" : "关键字管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/keyMsgManager.jsp'/>"
+				}
 			}];
 
 		var sourceTree = [
@@ -142,33 +68,15 @@
 			{
 				"text" : "粉丝统计",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/showChart.jsp' />"
 				}
 			}];
 		
 		var menuTree = [
 			{
-				"text" : "一级菜单",
+				"text" : "自定义菜单",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-				"text" : "二级菜单",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-				"text" : "删除菜单",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-				"text" : "所有菜单",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/menuManager.jsp'/>"
 				}
 			}];
 		
@@ -180,21 +88,27 @@
 				}
 			},
 			{
+				"text" : "微信墙",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%'/>"
+				}
+			},
+			{
 				"text" : "游戏",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
 				}
 			},
 			{
-				"text" : "智能服务",
+				"text" : "抽奖赚积分",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='40%' height='100%' src='ward.jsp' />"
 				}
 			},
 			{
-				"text" : "待定",
+				"text" : "电影小助手",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='40%' height='100%' src='movie.jsp'/>"
 				}
 			}];
 		
@@ -258,13 +172,14 @@
 			刘翔、丁婷、朱鹏 &copy; 版权所有
 		</div>
 	</div>
-<<<<<<< HEAD
-=======
+
 	<div data-options="region:'east',split:true" title="工具箱"  style="width:187px;">
-		<div class="easyui-calendar" style="width: 30%, height: 40%"></div>
+		<div class="easyui-calendar" style="width: 100%;height: 40%"></div>
+		<!-- <div id="p" class="easyui-panel" title="后台用户菜单预览" style="width: 100%;height:50%;">
+			
+		</div> -->
 		<a onClick="closeAll()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'">关闭所有窗口</a>
 	</div>
->>>>>>> branch 'master' of https://github.com/dtdtdtdtdt/wechat.git
 	<div data-options="region:'west',split:true,state:closed" title="菜单" style="width: 150px;">
 		<div class="easyui-accordion" style="width: 143px; height: 350px;">
 
@@ -283,11 +198,8 @@
 	<div data-options="region:'center',title:'操作显示页面'">
 		<!-- tabs区，有很多的tab -->
 		<div id="mainTt" class="easyui-tabs" data-options="fit:true,border:false">
-<<<<<<< HEAD
 			<div title="欢迎首页">欢迎您！</div>
-=======
-			<div title="操作"></div>
->>>>>>> branch 'master' of https://github.com/dtdtdtdtdt/wechat.git
+
 		</div>
 	</div>
 

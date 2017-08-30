@@ -4,11 +4,14 @@ create database wechat;
 create table admin(
     aid int primary key auto_increment,
     aname varchar(50),
-    apwd  varchar(50)
+    apwd  varchar(50),
+    role varchar(50),
+    atime datetime not null
 );
+drop table admin;
 alter table admin add atime datetime not null;
 update admin set atime=now() where aname='c'
-insert into admin(aname,apwd) values('a','a');
+insert into admin(aname,apwd,role,atime) values('a','a','root',now());
 select * from admin where role='root';
 
 --菜单表
@@ -17,6 +20,7 @@ create table menu(
 	menu varchar(50),
 	mtitle varchar(50)
 );
+drop table menu;
 insert into menu(menu,mtitle) values('safeTree','安全权限');
 insert into menu(menu,mtitle) values('userTree','粉丝管理');
 insert into menu(menu,mtitle) values('messageTree','消息管理');
@@ -34,8 +38,8 @@ create table role(
     menu  varchar(50),
     mtitle varchar(50)
 );
-select rid,role,group_concat(mtitle) as mtitle from role group by role order by rid;
-select rid,role,group_concat(mtitle) as mtitle from role where role='admin';
+select rid,role,group_concat(mtitle) as mtitle from role group by role order by mtitle;
+select rid,role,group_concat(mtitle) as mtitle from role where role='root';
 drop table role;
 insert into role(role,menu,mtitle) values('root','safeTree','安全权限');
 insert into role(role,menu,mtitle) values('root','userTree','粉丝管理');
@@ -69,7 +73,9 @@ create table users(
 	tagid_list varchar(50)
 )
 drop table user
-select * from users
+select distinct city from users where country='中国'
+select count(1) as value from users where city='深圳'
+
 insert into user(total,openid,subscribe,subscribe_time,nickname,
 sex,country,province,city,language,headimgurl,remark,groupid,tagid_list) 
 values(#{total},#{openid},#{subscribe},#{subscribe_time},#{nickname},#{sex},
