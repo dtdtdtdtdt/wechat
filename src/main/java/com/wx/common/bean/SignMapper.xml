@@ -50,8 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询所有签到用户  便于后台查看 -->
 	<select id="findAllSign"  resultType="Sign" parameterType="Sign">
-		select * from sign 	
-		<include refid="orderSql" />  
+		select * from sign 	where 1=1
+	
 		<include refid="pageSql" />
 	</select>
 	

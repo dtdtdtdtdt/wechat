@@ -2,6 +2,7 @@ package com.wx.common.web.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.wx.common.bean.Admin;
 import com.wx.common.bean.Role;
+import com.wx.common.biz.AdminBiz;
 import com.wx.common.web.model.JsonModel;
 import com.wx.role.biz.RoleBiz;
 
@@ -24,6 +26,9 @@ public class RoleController {
 
 	@Resource(name="roleBizImpl")
 	private RoleBiz roleBiz;
+	
+	@Resource(name="adminBizImpl")
+	private AdminBiz adminBiz;
 	
 	/**
 	 * 加载所有角色信息
@@ -80,6 +85,22 @@ public class RoleController {
 		try {
 			roleBiz.deleteRole(role);
 			jm.setCode(1);
+		} catch (Exception e) {
+			jm.setCode(0);
+			jm.setMsg(e.getMessage());
+		}
+		return jm;
+	}
+	
+	@RequestMapping("/back/showMenu.action")
+	public JsonModel findMenuByrole(Role role,HttpSession session){
+		JsonModel jm=new JsonModel();
+		List<Role> list=new ArrayList<Role>();
+		Admin admin=new Admin();
+		admin.setRole(role.getRole());
+		try {
+			list=adminBiz.findMenuByRole(admin);
+			session.setAttribute("preMenuList", list);
 		} catch (Exception e) {
 			jm.setCode(0);
 			jm.setMsg(e.getMessage());

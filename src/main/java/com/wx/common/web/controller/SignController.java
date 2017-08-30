@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -34,7 +35,7 @@ public class SignController {
 	
 	
 	@RequestMapping("/back/findAllSign.action")
-	public void findAllSign(HttpServletResponse response,HttpServletRequest request,Sign sign){
+	public void findAllSign(HttpServletResponse response,HttpServletRequest request,Sign sign,@RequestParam(value="page",required=false) String page){
 		//用于排序
 //		System.out.println( request.getParameter("sort")+ request.getParameter("order") );
 		
@@ -42,7 +43,7 @@ public class SignController {
 		sign.setOrderway(  request.getParameter("order")  );
 		Integer pagesize = Integer.parseInt(  request.getParameter("rows")    );
 		sign.setPagesize(  pagesize );
-		Integer start = (sign.getPages()-1)*sign.getPagesize();
+		Integer start =  (Integer.valueOf(page)-1 )*pagesize;
 		sign.setStart( start  );
 		
 		

@@ -133,4 +133,9 @@ public class UserBizImpl implements UserBiz {
 		
 	}
 
+	@Override
+	public int findUserCount(UserLx userLx) {
+		return (int) baseDao.findOne(userLx, "findUserCount");
+	}
+
 }

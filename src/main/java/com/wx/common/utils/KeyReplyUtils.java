@@ -111,6 +111,27 @@ public class KeyReplyUtils implements Serializable{
         out.flush();
         out.close();
 	}
+	//微信墙上墙成功反馈
+	public static void successWxWall(KeyReply kr,String toUserName,String fromUserName,PrintWriter out  ){
+		
+        TextMessage text = new TextMessage();
+        text.setToUserName(fromUserName);
+        text.setFromUserName(toUserName); 
+        text.setMsgType("text");     //返回的类型
+        text.setCreateTime(  new Date().getTime() );
+        text.setContent( "上墙成功！" );	
+        String message = XmlAndMap.textMessageToXml(text);
+        out.print(message);
+        out.flush();
+        out.close();
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

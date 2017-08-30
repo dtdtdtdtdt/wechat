@@ -32,6 +32,13 @@ public class DateBackUpRecordBizImpl implements DateBackUpRecordBiz {
 	@Override
 	public void updateDateBackUpRecordDeadline() {
 		baseDao.update(new DateBackUpRecord(), "updateDateBackUpRecordDeadline");
+		//查找是否有==0的备份文件否则删除
+		List<DateBackUpRecord> list = findAllDateBackUpRecordWhereDeadline();
+		if(list!=null) {
+			for(DateBackUpRecord d:list) {
+				delDatabaseBackUpRecordByFilePath(d); //删除文件
+			}
+		}
 
 	}
 	//查找所有备份记录

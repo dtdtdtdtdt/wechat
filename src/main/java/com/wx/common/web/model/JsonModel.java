@@ -3,6 +3,8 @@ package com.wx.common.web.model;
 import java.io.Serializable;
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
 public class JsonModel<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -15,7 +17,16 @@ public class JsonModel<T> implements Serializable {
 	private Integer pages;//当前第几页
 	private Integer pageSize;//每页xx条
 	private List<T> rows;//记录集合
+	private JSONObject json;
 	
+	public JSONObject getJson() {
+		return json;
+	}
+
+	public void setJson(JSONObject json) {
+		this.json = json;
+	}
+
 	public JsonModel(int code,String msg,Object obj){
 		super();
 		this.code=code;
@@ -69,9 +80,11 @@ public class JsonModel<T> implements Serializable {
 	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
+
 	@Override
 	public String toString() {
-		return "JsonModel [code=" + code + ", msg=" + msg + ", obj=" + obj +", total=" + total
-				+ ", pages=" + pages + ", pageSize=" + pageSize + ", rows=" + rows + "]";
+		return "JsonModel [code=" + code + ", msg=" + msg + ", obj=" + obj + ", total=" + total + ", pages=" + pages
+				+ ", pageSize=" + pageSize + ", rows=" + rows + ", json=" + json + "]";
 	}
+
 }

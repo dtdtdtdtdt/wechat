@@ -20,8 +20,6 @@
 		
 		$('#manTypeTable').datagrid({
 			url:'back/findAdmins.action',   //查询时加载的URL
-			pagination:true,   //显示分页
-			pageSize:50,       //默认分页的条数
 			fitColumns:true,   //自适应列
 			fit:true,   	   //自动补全
 			loadMsg:"正在为您加载数据。。。",

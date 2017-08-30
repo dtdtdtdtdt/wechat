@@ -10,7 +10,7 @@ String basePath =request.getScheme()+"://"+request.getServerName()+":"+request.g
 %>
 
 <base href="<%=basePath %>">
-<title>微信公众号机器人开关控制</title>
+<title>微信墙开关控制</title>
 <script src="js/jquery.min.js" ></script>
 <script src="js/lc_switch.js" ></script>
 <link rel="stylesheet" href="css/lc_switch.css">
@@ -60,10 +60,11 @@ a {
 <div id="second_div">
   <form>
     <div style="float: left; width: 50%;">
-      <p> 机器人开关控制 </p>
+      <p> 微信墙开关控制 </p>
+      <p> Tips:开启微信墙功能默认关闭机器人功能 </p>
       <p id="ct" name="ct">
       	<!-- 这一段需要进行拼接  0是不启用机器人对应off  1 是启用机器人对应on -->
-     <input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off" /> 
+     	<input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off" /> 
    	
       </p>
 
@@ -84,7 +85,7 @@ $(document).ready(function(e) {
 		$.ajax({
 			type:"POST",
 			data: "status="+status,
-			url:"back/updateRobotStatus.action",
+			url:"back/updateWxWallStatus.action",
 			dataType:"JSON"
 		});	
 		

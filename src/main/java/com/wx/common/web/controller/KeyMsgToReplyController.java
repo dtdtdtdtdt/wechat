@@ -91,12 +91,8 @@ public class KeyMsgToReplyController {
 	@RequestMapping(value="/back/keyMsgToReply.action")
 	public JsonModel keyMsgToReplyImg(KeyReply keyReply,HttpServletRequest request,HttpServletResponse resp,@RequestParam("file")CommonsMultipartFile file2) throws ServletException,IOException, ParseException, java.text.ParseException, KeyManagementException, NoSuchAlgorithmException, NoSuchProviderException{
 		JsonModel jm = new JsonModel();
-		
-
 		//媒体id设置为全局变量
 		String mediaId = null;
-		
-		
 		
 		//文件大小必须限制
 		long fileSize = file2.getSize();
@@ -131,9 +127,6 @@ public class KeyMsgToReplyController {
 				  break;
 		}
 		
-
-		
-		
 		
         long  startTime=System.currentTimeMillis();
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
@@ -158,8 +151,7 @@ public class KeyMsgToReplyController {
                {
             	  
             	   String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            	   
-            	   
+
 	   				// 取tomcat路径
 	   			   Calendar c = Calendar.getInstance();
 	   			   String tomcatdir = request.getRealPath("/");
@@ -176,9 +168,9 @@ public class KeyMsgToReplyController {
 					   filePath.mkdirs();
 				   }
             	   
-				   String path = picpath.toString();  
+				   String path = picpath.toString();
                    //上传 到指定磁盘
-                   file.transferTo(  picpath ); 
+                   file.transferTo(  picpath );
                    //在上传到微信服务器！
                    String access_token = GetAccessToken.getAT(accessTokenZpBiz);
                    mediaId = WeixinUtil.upload(path, access_token, msgType);

@@ -9,7 +9,6 @@ create table wxwalluser(
 insert into wxwalluser(fromUserName) values('123')
 insert into wxwalluser(fromUserName) values('456')
 
-
 select * from wxwalluser where fromUserName = 
 
 update wxwalluser set status = where fromUserName = 

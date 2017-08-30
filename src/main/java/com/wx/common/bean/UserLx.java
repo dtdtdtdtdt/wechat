@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author 刘翔
  *
  */
-public class UserLx implements Serializable{
+public class UserLx extends CommonBean implements Serializable{
 	private static final long serialVersionUID = 2454542358870962981L;
 	
 	private Integer total;

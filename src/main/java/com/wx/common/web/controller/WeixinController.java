@@ -27,6 +27,7 @@ import com.wx.common.bean.SecondMenuDb;
 import com.wx.common.bean.Sign;
 import com.wx.common.bean.SubscribeReply;
 import com.wx.common.bean.UserLx;
+import com.wx.common.bean.WxWallStatus;
 import com.wx.common.bean.WxWallUser;
 import com.wx.common.biz.AccessTokenZpBiz;
 import com.wx.common.biz.FirstMenuDbBiz;
@@ -36,6 +37,7 @@ import com.wx.common.biz.RobotStatusBiz;
 import com.wx.common.biz.SecondMenuDbBiz;
 import com.wx.common.biz.SignBiz;
 import com.wx.common.biz.SubscribeReplyBiz;
+import com.wx.common.biz.WxWallStatusBiz;
 import com.wx.common.biz.WxWallUserBiz;
 import com.wx.common.utils.CheckUtil;
 import com.wx.common.utils.CommonDateUtils;
@@ -50,8 +52,6 @@ import com.wx.message.Image;
 import com.wx.message.ImageMessage;
 import com.wx.message.TextMessage;
 import com.wx.user.biz.UserBiz;
-import com.wx.wxwall.entity.User;
-import com.wx.wxwall.websocket.MyWebSocketHandler;
 
 import io.goeasy.GoEasy;
 
@@ -90,6 +90,8 @@ public class WeixinController {
 	private WxWallUserBiz wxWallUserBiz;
 	
 	
+	@Resource(name="wxWallStatusBizImpl")
+	private WxWallStatusBiz wxWallStatusBiz;
 	
 	
 	// 微信服务器认证发送一条get请求
@@ -281,8 +283,9 @@ public class WeixinController {
         	UserLx userLx = new UserLx();
         	userLx.setOpenid(fromUserName);
         	UserLx user = ub.findUser(userLx);
-
-        	
+        	KeyReply  kr2 = null;
+        	//微信墙功能
+        	WxWallStatus ws = wxWallStatusBiz.findWxWallStatus();
         	
         	//先判断是否有启用机器人功能
         	RobotStatus rs = robotStatusBiz.findRobotStatus();
@@ -327,21 +330,8 @@ public class WeixinController {
 
             		
             	}
-        	}else{ // 不使用机器人其他功能不受影响！	
-            	//首先判断该用户是否进入微信墙模式   一会搞定...
-            	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
-            	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
-            	if(kr!=null){
-            		//根据类型判断进行回复
-            		switch(kr.getKtype()){
-            			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
-    	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
-    	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
-    	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
-    	        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
-            		}
-            	
-            	}
+        	}
+        	if( ws!=null&&ws.getStatus()==1 ){
             	//如果发送的文本是  微信墙则绑定微信墙功能！  
             	//处理思路   新建一张表  用于存取上墙的用户   以后就可以抽奖操作
             	WxWallUser wwu = wxWallUserBiz.findWxWallUserByFromUserName(fromUserName);
@@ -354,10 +344,12 @@ public class WeixinController {
                 		//推送一条绑定微信墙成功的信息
                 		WxWallTemplateUtil.sendWxWallLogin(fromUserName, accessTokenZpBiz);
                 	}else { //更改使用状态
+                		if( wwu.getStatus()!=1 ) { //已经进入微信墙状态
+                       		//推送一条绑定微信墙成功的信息
+                    		WxWallTemplateUtil.sendWxWallLogin(fromUserName, accessTokenZpBiz);
+                		}
             			wwu.setStatus(1);
             			wxWallUserBiz.updateWxWallUserStatus(wwu);
-                		//推送一条绑定微信墙成功的信息
-                		WxWallTemplateUtil.sendWxWallLogin(fromUserName, accessTokenZpBiz);
                 	}
             		
             	}
@@ -371,25 +363,37 @@ public class WeixinController {
             			WxWallTemplateUtil.sendWxWallOut(fromUserName, accessTokenZpBiz);
             			return;
             		}
+            		//反馈用户上墙成功
+            		KeyReplyUtils.successWxWall(kr2, toUserName, fromUserName, out);
             		//字符串截取一下
-            		content = content.substring(0, 13);
-                	//使用goeasy推送到前端页面！
+            		if( content.length()>=13 ) {
+            			content = content.substring(0, 13);
+            		}                	//使用goeasy推送到前端页面！
             		GoEasy goEasy = new GoEasy("BC-e44baa9b32d64f40abf5cddeffa3aa54");
             		goEasy.publish("BS-8ecca8bee3204a06a16f5d584262bee0",user.getNickname()+":"+content+"#$"+user.getHeadimgurl() );  
-
             	}
-        		
         	}
+        	
+        	//微信墙未开启    机器人也可以触发关键字回复
+        	if( ws!=null&&ws.getStatus()==0 ) {
+            	//文本关键字回复功能
+            	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
+            	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+            	if(kr!=null){
+            		//根据类型判断进行回复
+            		switch(kr.getKtype()){
+            			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+    	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+    	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+    	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+    	        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
+            		}
+            	
+            	}
+        	}
+        	
+        	
 
-        	
-        	
-        	
-
-    	
-        
-    		
-
-        	
 
         }
 	}

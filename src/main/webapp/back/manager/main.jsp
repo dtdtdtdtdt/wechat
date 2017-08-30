@@ -7,12 +7,22 @@
 				{
 					"text" : "用户管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp' />"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp'/>"
 					}
 				},{
 					"text" : "角色管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageRole.jsp' />"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageRole.jsp'/>"
+					}
+				},{
+					"text" : "数据安全备份",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUp.jsp'/>"
+				    }
+			    },{
+					"text" : "数据备份记录",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUpRecord.jsp'/>"
 					}
 				}];
 
@@ -62,19 +72,19 @@
 			{
 				"text" : "查看粉丝",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp' />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp'/>"
 				}
 			},
 			{
 				"text" : "粉丝统计",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/showChart.jsp'/>"
 				}
 			},
 			{
 				"text" : "粉丝签到数据",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/signManager.jsp' />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/signManager.jsp'/>"
 				}
 			}];
 		
@@ -90,37 +100,31 @@
 			{
 				"text" : "机器人",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/robot.jsp'/>"
-				}
-			},
-			{
-				"text" : "游戏",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' />"
-				}
-			},
-			{
-				"text" : "智能服务",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'  />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/robotStatus.jsp'/>"
 				}
 			},
 			{
 				"text" : "微信墙",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'    />"
-				}
-			},			
-			{
-				"text" : "数据安全备份",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUp.jsp'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/wxwallStatus.jsp'//>"
 				}
 			},
 			{
-				"text" : "数据备份记录",
+				"text" : "游戏",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUpRecord.jsp'/>"
+					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
+				}
+			},
+			{
+				"text" : "抽奖赚积分",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
+				}
+			},
+			{
+				"text" : "电影小助手",
+				"attributes" : {
+					"url" : "<iframe width='40%' height='100%' src='movie.jsp'/>"
 				}
 			}];
 		
@@ -165,61 +169,7 @@
 					}
 				} ],
 				content : node.attributes.url
-			})
-			//判断微信自定义菜单被打开而且选中时发送ajax请求获取菜单信息展示
-			/*
-			if(node.text==="自定义菜单"){
-				$.ajax({
-					   url: "back/findFirstAndSecondMenu.action",
-					   type: "POST",
-					   dataType: "JSON",
-					   success: function (data) {
-						   
-						   document.getElementById("menushowpanel").style.display="block";
-						   
-							$(data.rows).each(function(index,item){
-								$("#menutree").html();
-								var str ="";
-								//先显示一级菜单
-								if(item.type!="sub_button"){
-									str+="<ul><li ><span>"+item.fname+"</span></li></ul>";
-								}
-								$("#menutree").html($("#menutree").html()+str);
-							});	
-							//显示含有二级菜单的一级菜单显示
-							for(var i=0;i<data.rows.length;i++){
-								var str ="";
-								var item = data.rows[i];
-								if( item.type=="sub_button" ){
-									str+="<ul><li ><span>"+item.fname+"</span></li></ul>";
-									//同时显示所属二级菜单
-									$("#menutree").html($("#menutree").html()+str);
-									break;
-								}
-							}
-							// 所有二级菜单显示
-							for(var i=0;i<data.rows.length;i++){
-								var str ="";
-								var item = data.rows[i];
-								if( item.type=="sub_button" ){
-									
-									str+="<ul><ul><li>"+item.sname+"</li></ul></ul>";
-								
-									
-									
-								}
-								$("#menutree").html($("#menutree").html()+str);
-							}
-							
-							
-							
-							
-							
-					   }
-				});
-			}
-			*/
-			
+			});
 		}
 	};
 	
@@ -255,15 +205,6 @@
 		<a onClick="closeAll()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'">关闭所有窗口</a>
 		<br/>
 		<br/>
-		<!-- 用于微信自定义菜单展示处理 -->
-		<!-- 
-		<div class="easyui-panel" style="padding:5px"  id="menushowpanel" >
-			<ul class="easyui-tree" id="menutree">
-				<span>菜单</span>
-				
-			</ul>
-		</div>
- 		-->
 		   
 	
 		

@@ -208,7 +208,6 @@
         		alert("请把信息填写完整！");
         	}
         }
-
 	}
 	function clearForm2(){
 		$('#ff').form('clear');
@@ -232,7 +231,7 @@
 							//clearForm();
 
 						}else{
-							alert("失败！ "+data.msg);
+							alert("失败"+data.msg);
 						}
 					} 
 			}); 

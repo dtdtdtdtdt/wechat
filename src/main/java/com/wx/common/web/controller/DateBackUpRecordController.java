@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -31,14 +32,14 @@ public class DateBackUpRecordController {
 	
 	//查找所有备份记录
 	@RequestMapping(value="/back/databaseBackUpRecord.action")
-	public void findAllDateBackUpRecord(HttpServletResponse response,DateBackUpRecord dateBackUpRecord,HttpServletRequest request) throws ParseException {
+	public void findAllDateBackUpRecord(HttpServletResponse response,DateBackUpRecord dateBackUpRecord,HttpServletRequest request,@RequestParam(value="page",required=false) String page) throws ParseException {
 
 		//用于排序
 		dateBackUpRecord.setOrderby(  request.getParameter("sort")   );
 		dateBackUpRecord.setOrderway(  request.getParameter("order")  );
 		Integer pagesize = Integer.parseInt(  request.getParameter("rows")    );
 		dateBackUpRecord.setPagesize(  pagesize );
-		Integer start = (dateBackUpRecord.getPages()-1)*dateBackUpRecord.getPagesize();
+		Integer start = ( Integer.parseInt(page) -1)*pagesize;
 		dateBackUpRecord.setStart( start  );
 		
 		

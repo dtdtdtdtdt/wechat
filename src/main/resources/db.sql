@@ -6,14 +6,23 @@ create table admin(
     aname varchar(50),
     apwd  varchar(50),
     atime datetime,
-    role varchar(50)
-);
+    role varchar(50),
+    atime datetime not null
+)
+
 alter table admin add role varchar(50);
 update admin set role='root' where aname='x'
 insert into admin(aname,apwd,atime,role) values('a','a',now(),'root');
+
+drop table admin;
+alter table admin add atime datetime not null;
+update admin set atime=now() where aname='c'
+insert into admin(aname,apwd,role,atime) values('a','a','root',now());
+
 select * from admin where role='root';
 
 select * from admin where aname = 'a'#' and apwd = '11'
+
 --菜单表
 create table menu(
 	mid int primary key auto_increment,
@@ -38,9 +47,15 @@ create table role(
     menu  varchar(50),
     mtitle varchar(50)
 );
+
 drop table role;
 select rid,role,group_concat(mtitle) as mtitle from role group by role order by rid;
 select rid,role,group_concat(mtitle) as mtitle from role where role='admin';
+
+select rid,role,group_concat(mtitle) as mtitle from role group by role order by mtitle;
+select rid,role,group_concat(mtitle) as mtitle from role where role='root';
+drop table role;
+
 insert into role(role,menu,mtitle) values('root','safeTree','安全权限');
 insert into role(role,menu,mtitle) values('root','userTree','粉丝管理');
 insert into role(role,menu,mtitle) values('root','messageTree','消息管理');
@@ -55,6 +70,7 @@ insert into role(role,menu,mtitle) values('admin','menuTree','菜单管理');
 insert into role(role,menu,mtitle) values('admin','smallTree','微程序');
 
 --用户信息表
+drop table users
 create table users(
 	uid int primary key auto_increment,
 	total int,
@@ -73,7 +89,9 @@ create table users(
 	tagid_list varchar(50)
 )
 drop table user
-select * from users
+select distinct city from users where country='中国'
+select count(1) as value from users where city='深圳'
+
 insert into user(total,openid,subscribe,subscribe_time,nickname,
 sex,country,province,city,language,headimgurl,remark,groupid,tagid_list) 
 values(#{total},#{openid},#{subscribe},#{subscribe_time},#{nickname},#{sex},

@@ -36,6 +36,8 @@ public class DateBackUpUtil {
 	    File tomcatFile = new File(tomcatdir);
 	    File webapppath = tomcatFile.getParentFile();
    
+	    System.out.println( tomcatdir );
+	    
 	    String val = type;  //备份类型
 	    File filePath = null;
 	    String fileNameLast = null;
@@ -57,10 +59,6 @@ public class DateBackUpUtil {
 			   Path.mkdirs();
 		   }
 	    }
-//	    System.out.println( filePath  );
-	    
-
-	    
 
 	    Runtime runtime = Runtime.getRuntime();
 		
@@ -269,6 +267,84 @@ public class DateBackUpUtil {
 	}
 	
 	
+	//备份所有表数据  系统自动备份
+	public static boolean systemAutoMaticSaveAll(DateBackUpRecordBiz dateBackUpRecordBiz,DateBackUpBiz dateBackUpBiz) {
+		// 备份文件存放的路径 // 取tomcat路径
+	    Calendar c = Calendar.getInstance();
+	    String tomcatdir = "C:\\apache-tomcat\\webapps\\wechat\\";
+	    File tomcatFile = new File(tomcatdir);
+	    File webapppath = tomcatFile.getParentFile();
+   
+	    Runtime runtime = Runtime.getRuntime();
+		boolean flag = false;
+		try {
+			//备份所有表包括结构和数据  查找所有表
+			List<String> list =  dateBackUpBiz.findAllTable();
+			if( list!=null&&list.size()>0 ) {
+				for( String str :list ) {
+					StringBuffer bs = new StringBuffer();
+					bs.append("mysqldump ");
+					bs.append(" -u");
+					bs.append("root" + " ");
+					bs.append("-p" + "a" + " ");
+					bs.append("wechat");
+					bs.append(" " +str);
+					
+					String fileName2 = new  SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());  //df.format(new Date());
+					File filePathAll = new File(webapppath, "backupFile" + File.separator + c.get(Calendar.YEAR) + File.separator
+							+ (c.get(Calendar.MONTH) + 1) + File.separator+fileName2+"-"+str+"-sd.sql");
+				    String fileNameLast2 = filePathAll.toString().substring(filePathAll.toString().lastIndexOf("\\")+1, filePathAll.toString().length());
+				    
+				    File PathAll = new File(filePathAll.toString().substring(0, filePathAll.toString().lastIndexOf("\\")));
+				   
+				    if (PathAll.exists() == false) {
+				    	PathAll.mkdirs();
+				    }
+					
+					// 调用 mysql 的 cmd:
+					Process child = runtime.exec("cmd /c " + bs.toString());				
+					// 把进程执行中的控制台输出信息写入.sql文件，即生成了备份文件。注：如果不对控制台信息进行读出，则会导致进程堵塞无法运行
+					InputStream in = child.getInputStream();// 控制台的输出信息作为输入流
+					InputStreamReader xx = new InputStreamReader(in, "utf-8");// 设置输出流编码为utf8。这里必须是utf8，否则从流中读入的是乱码
+					String inStr;
+					StringBuffer sb = new StringBuffer("");
+					String outStr;
+					// 组合控制台输出信息字符串
+					BufferedReader br = new BufferedReader(xx);
+					while ((inStr = br.readLine()) != null) {
+						sb.append(inStr + "\r\n");
+					}
+					outStr = sb.toString();
+
+					// 要用来做导入用的sql目标文件：
+					FileOutputStream fout = new FileOutputStream(filePathAll.toString());
+					OutputStreamWriter writer = new OutputStreamWriter(fout, "utf8");
+					writer.write(outStr);
+					// 注：这里如果用缓冲方式写入文件的话，会导致中文乱码，用flush()方法则可以避免
+					writer.flush();
+					// 别忘记关闭输入输出流
+					//in.close();
+					xx.close();
+					br.close();
+					writer.close();
+					fout.close();
+					//存入数据库
+					DateBackUpRecord dateBackUpRecord = new DateBackUpRecord();
+					dateBackUpRecord.setFilename(fileNameLast2);
+					dateBackUpRecord.setFilepath(filePathAll.toString());
+					dateBackUpRecord.setOperator( "System");
+					dateBackUpRecord.setType("结构和数据");
+					dateBackUpRecordBiz.addDateBackUpRecordByOperator(dateBackUpRecord);	
+				}
+			}
+			return true;
+
+		} catch (Exception e) {
+			System.out.println("系统自动备份数据库失败！");
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	
 	
 	

@@ -29,12 +29,30 @@
 		select * from users where openid=#{openid}
 	</select>
 	
+	<!-- 排序条件的拼接 -->
+	<sql id="orderSql">
+			<if test="orderBy!=null and orderby!=''">
+			order by #{orderby}
+			  	<if test="orderway!=null and orderway!=''">
+			  			#{orderway}
+			  	</if>
+			</if>
+	</sql>
+	
+	<!-- 分页的拼接 -->
+	<sql id="pageSql">
+		<if test="start!=null">
+			limit ${start},${pagesize}
+		</if>
+	</sql>
+	
 	<!-- 查询所有用户 -->
 	<select id="findAllUser" resultType="UserLx" parameterType="UserLx">
 		select * from users where 1=1
 		<if test="subscribe != null">
 			and subscribe=#{subscribe}
 		</if>
+		<include refid="pageSql"/>
 	</select>
 
 	<!-- 添加用户 返回用户对象 -->
