@@ -96,7 +96,7 @@
 			{
 				"text" : "游戏",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/robot2.jsp'/>"
+					"url" : "<iframe width='100%' height='100%' />"
 				}
 			},
 			{
