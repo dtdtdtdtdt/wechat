@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.SubscribeReplyMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	
+	<!-- 插入关注回复 -->
+	<insert id="addSubscribeReply" parameterType="SubscribeReply" useGeneratedKeys="true" keyProperty="sid">
+		insert into subscribereply(keywords) values(#{keywords})
+	</insert>
+	
+
+	<!-- 查找所有关注回复设置 -->
+	<select id="findAllSubscribeReply" resultType="SubscribeReply">
+		select * from subscribereply
+	</select>
+
+
+	<delete id="delSubscribeReplyBySid" parameterType="SubscribeReply">
+		delete from subscribereply where sid=#{sid}
+	</delete>
+
+</mapper>

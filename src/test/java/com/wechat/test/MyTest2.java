@@ -1,5 +1,8 @@
 package com.wechat.test;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +21,8 @@ public class MyTest2 {
 	
 	public static void main(String[] args) {
 		
-		String s = "JZg2xpzOe9IqyI7oGw31wq3N0ZJnwEgPOxnEk87dntoV2kaNDSo-tAiV4gCfFLq41ygOCQK31ySJjNtBzHhWr_a5QxhSKwZn3nNpOv6oHUuoxXip9X3gZQmZ43e3AP2ZDEBaAFAWXU";
-		
-		System.out.println( s.length() );
+		String str="C:\\apache-tomcat-7.0.77\\webapps\\backupFile\\2017\\8\\2017-08-30-09-02-26-accesstoken-sd.sql";
+		System.out.println(  str.substring(0, str.lastIndexOf("\\")) );
 	}
 	
 }

@@ -29,12 +29,17 @@ public class KeyMsgManager {
 	
 	
 	@RequestMapping("/back/findAllKeyWords.action")
-	public void findAllKeyWords(HttpServletResponse response){
+	public void findAllKeyWords(HttpServletResponse response,HttpServletRequest request,KeyReply keyReply){
+		//用于排序
+		keyReply.setOrderby(  request.getParameter("sort")   );
+		keyReply.setOrderway(  request.getParameter("order")  );
+		Integer pagesize = Integer.parseInt(  request.getParameter("rows")    );
+		keyReply.setPagesize(  pagesize );
+		Integer start = (keyReply.getPages()-1)*keyReply.getPagesize();
+		keyReply.setStart( start  );
 		
 		
-		List<KeyReply> list = keyReplyBiz.findAllKeyWords();
-
-
+		List<KeyReply> list = keyReplyBiz.findAllKeyWords(keyReply);
 		Gson gson=new Gson();
 		int count=keyReplyBiz.findKeyWordsCount();
 		//easyui要求的格式

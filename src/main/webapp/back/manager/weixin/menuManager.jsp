@@ -288,7 +288,7 @@
 					width:20
 				},{
 					field:'fid',  //这些属性对象Javabean中的名字，注意大小写
-					title:'所属一级菜单',
+					title:'所属一级菜单编号',
 					width:20,
 					align:'center'
 	
@@ -442,8 +442,6 @@
         	
         	
         }
-
-
     }
 	
    
@@ -455,6 +453,7 @@
 		var value = objS.options[objS.selectedIndex].value; //获得option中的值
 		if( value==1){
 			$("#bangDingEvent").show();
+			$("#url3").show();
 			$("#url2").hide();
 		}
 		 else if (value == 2)  //视图url和包含子菜单类型
@@ -477,36 +476,45 @@
 		var value = objS.options[objS.selectedIndex].value; //获得option中的值
 		if( value==1){
 			$("#2url").hide(); //点击
+			$("#url4").show();
+			$("#bangDingEvent2").show();
 		}
 		 else if (value == 2)  //视图url
 		{
 			$("#2url").show();
+			$("#bangDingEvent2").hide();
+			$("#url4").hide();
 		}
 	}
 	
 	
 	//提交一级菜单的增加
 	function submitForm(){
-		$('#ff').form('submit',{
-			onSubmit:function(){
-	        	//发送一个ajax请求
-				$.ajax({
-					type:"POST",
-					url:"back/addFirstMenu.action",
-					data:$("#ff").serialize(),
-					dataType:"JSON",
-					success:function(data){
-						if(data.code==1){
-							alert("增加成功！");
-							location.href = "back/manager/weixin/menuManager.jsp";
-						}else{
-							alert("失败，原因："+data.msg);
+		var name = $("#name").val();
+		if(name!=null&&name!=""){
+			$('#ff').form('submit',{
+				onSubmit:function(){
+		        	//发送一个ajax请求
+					$.ajax({
+						type:"POST",
+						url:"back/addFirstMenu.action",
+						data:$("#ff").serialize(),
+						dataType:"JSON",
+						success:function(data){
+							if(data.code==1){
+								alert("增加成功！");
+								location.href = "back/manager/weixin/menuManager.jsp";
+							}else{
+								alert("失败，原因："+data.msg);
+							}
 						}
-					}
-				});
-				return $(this).form('enableValidation').form('validate');
-			}
-		});
+					});
+				}
+			});
+		}else{
+			alert("请填写名称！");
+		}
+
 	}
 	function clearForm(){
 		$('#ff').form('clear');
@@ -514,29 +522,36 @@
 	
 	//二级级菜单的增加
 	function submitForm2(){
-		$('#ff2').form('submit',{
-			onSubmit:function(){
-	        	//发送一个ajax请求
-				$.ajax({
-					type:"POST",
-					url:"back/addSecondMenu.action",
-					data:$("#ff2").serialize(),
-					dataType:"JSON",
-					success:function(data){
-						if(data.code==1){
-							alert("增加成功！");
-							location.href = "back/manager/weixin/menuManager.jsp";
-						}else{
-							alert("失败，原因："+data.msg);
+		var name2 = $("#name2").val();
+		var url2 = $("#2url2").val();
+		if( name2!=""&&url2!=""){
+			$('#ff2').form('submit',{
+				onSubmit:function(){
+		        	//发送一个ajax请求
+					$.ajax({
+						type:"POST",
+						url:"back/addSecondMenu.action",
+						data:$("#ff2").serialize(),
+						dataType:"JSON",
+						success:function(data){
+							if(data.code==1){
+								alert("增加成功！");
+								location.href = "back/manager/weixin/menuManager.jsp";
+							}else{
+								alert("失败，原因："+data.msg);
+							}
 						}
-					}
-				});
-				return $(this).form('enableValidation').form('validate');
-			}
-		});
+					});
+					return $(this).form('enableValidation').form('validate');
+				}
+			});
+		}else{
+			alert("名称和链接url不能为空！");
+		}
+
 	}
 	function clearForm2(){
-		$('#ff').form('clear');
+		$('#ff2').form('clear');
 	}
 
 	
@@ -570,7 +585,7 @@
 	    	<table cellpadding="5">
 	    		<tr>
 	    			<td>名称</td>
-	    			<td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
+	    			<td><input class="easyui-textbox" type="text" name="name" id="name" data-options="required:true"></input></td>
 	    		</tr>
 	    		<tr>
 	    			<td>类型</td>
@@ -643,21 +658,43 @@
 	    	
 	    		<tr>
 	    			<td>名称</td>
-	    			<td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
+	    			<td><input class="easyui-textbox" type="text" name="name" id="name2" data-options="required:true"></input></td>
 	    		</tr>
 	    		<tr>
 	    			<td>类型</td>
 	    			<td>
 	    				<select  id="typeselect2" onchange="showAll2()" name="type">
-	    					<option value="1">点击</option>
+	    					<!-- 点击菜单暂时去掉 -->
+	    					<!-- <option value="1">点击</option>  -->
 	    					<option value="2">视图</option>
 	    				</select>
 	    			</td>
 	    		</tr>
-	    		<tr  hidden="hidden" id="2url">
+	    		<tr   id="2url">
 	    			<td>链接url</td>
-	    			<td><input class="easyui-textbox" name="url" data-options="multiline:true" style="height:60px;width:200px"></input></td>
+	    			<td><input class="easyui-textbox" name="url" id="2url2" data-options="multiline:true" style="height:60px;width:200px"></input></td>
 	    		</tr>
+	    		
+	    		
+	    		<!-- 点击事件选择什么样式的推送 -->
+	    		<tr hidden="hidden"  id="bangDingEvent2">
+	    			<td>绑定事件</td>
+	    			<td>
+	    				<select  id="bangDing" onchange="showAll2()" name="bangdingType">
+	    					<option value="1">图片推送</option>
+	    					<option value="2">语音推送</option>
+	    					<option value="3">视频推送</option>
+	    					<option value="4">图文推送</option>
+	    				</select>
+	    			</td>
+	    		</tr>
+	    		
+	    		<!-- 点击事件推送素材来自回复关键字设置  避免重复代码太多 -->
+	    		<tr  hidden="hidden"  id="url4">
+	    			<td>推送内容请选择回复关键字素材</td>
+	    			<td><input class="easyui-textbox" name="bangdingName" data-options="multiline:true" style="height:60px;width:100px"></input></td>
+	    		</tr>
+	    		
 
 	    	</table>
 	    </form>

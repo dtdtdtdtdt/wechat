@@ -3,7 +3,7 @@ package com.wx.common.bean;
 import java.io.Serializable;
 
 //关键回复
-public class KeyReply implements Serializable {
+public class KeyReply extends CommonBean implements Serializable {
 
 	private static final long serialVersionUID = 7143706070218017489L;
 

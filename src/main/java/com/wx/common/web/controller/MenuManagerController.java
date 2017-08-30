@@ -85,6 +85,7 @@ public class MenuManagerController {
 		if( type==1  ){
 			firstMenuDb.setName(  firstMenuDb.getName() );
 			firstMenuDb.setType("click");
+			firstMenuDb.setEvent(bangdingName);
 			//让可以随机生成
 			String str = String.valueOf( new Date().getTime() ) ;
 			firstMenuDb.setKey( str );
@@ -97,7 +98,7 @@ public class MenuManagerController {
 			firstMenuDb.setUrl(  firstMenuDb.getUrl() );
 			//插入数据库
 			firstMenuDbBiz.addFirstMenu(firstMenuDb);
-		}else if(type==3){ //视图 有url
+		}else if(type==3){ //子菜单
 			firstMenuDb.setName(  firstMenuDb.getName() );
 			firstMenuDb.setType("sub_button");
 			//插入数据库
@@ -206,10 +207,25 @@ public class MenuManagerController {
 	}
 	
 	
-	//增加二 2级菜单
+	//增加二 2级菜单   判断二级菜单的数量<=5
 	@RequestMapping("/back/addSecondMenu.action")
 	public JsonModel addSecondMenu(SecondMenuDb secondMenuDb,HttpServletRequest request){
 		JsonModel jm = new JsonModel();
+		
+		//判断每个二级菜单的数量 
+		List<SecondMenuDb> secondMenuList = secondMenuDbBiz.findSecondCountGroupBy();
+		if( secondMenuList!=null&&secondMenuList.size()>0 ){
+			for( SecondMenuDb sm: secondMenuList){
+				if( sm.getCount()>=5 ){
+					jm.setCode(0);
+					jm.setMsg("二级菜单最多为五个,不能再增加了！");
+					return jm;
+				}
+			}
+			
+		}
+		
+
 		SecondMenuDb smd = new SecondMenuDb();
 		int fid =  Integer.parseInt( request.getParameter("ftype")  );
 		
@@ -246,6 +262,18 @@ public class MenuManagerController {
 		jm.setCode(1);
 		return jm;
 	}
+	
+	//查询所有菜单  包括一级和二级菜单！
+	@RequestMapping("/back/findFirstAndSecondMenu.action")
+	public JsonModel findFirstAndSecondMenu(  ){
+		JsonModel jm = new JsonModel();
+		List<FirstMenuDb> rows = firstMenuDbBiz.findFirstAndSecondMenu();
+		jm.setRows(rows);
+		return jm;
+	}
+	
+	
+	
 	
 	
 }

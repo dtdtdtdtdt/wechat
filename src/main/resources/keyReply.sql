@@ -24,11 +24,11 @@ create table keyreply(
 insert into keyreply(keywords,content,mediaId,title,description,picurl,url) values('你好','嗯，你也好！') 
 
 --
-select * from keyreply group by ktype asc
+select * from keyreply order by ktype asc limit 5,10
 select ktype,group_concat(keywords) as keywords from keyreply group by ktype
 
 
-delete from keyreply where kid =92
+delete from keyreply 
 
 select ktype,keywords,content,mediaId,title,description,picurl,url from keyreply group by ktype asc
 

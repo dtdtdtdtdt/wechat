@@ -20,4 +20,9 @@ public interface FirstMenuDbBiz {
 	
 	//根据fid删除该一级菜单
 	public void deleteFirstMenuByFid( FirstMenuDb firstMenuDb );
+	
+	//查询一级和二级菜单共同查询
+	public List<FirstMenuDb> findFirstAndSecondMenu();
+	
+	
 }

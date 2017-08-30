@@ -13,8 +13,6 @@
             <resources location="/js/" mapping="/js/**"/>       
             <resources location="/css/" mapping="/css/**"/>  
            
-           
-          
-            
-                 
+
+
 </beans:beans>

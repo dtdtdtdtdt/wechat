@@ -13,7 +13,7 @@ public interface KeyReplyBiz {
 	public KeyReply findKeyWords(String keyWords);
 	
 	//查找所有关键字
-	public List<KeyReply> findAllKeyWords();
+	public List<KeyReply> findAllKeyWords(KeyReply KeyReply);
 	
 	//查找关键字数量
 	public int findKeyWordsCount();

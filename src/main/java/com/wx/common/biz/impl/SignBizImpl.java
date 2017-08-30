@@ -1,5 +1,7 @@
 package com.wx.common.biz.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class SignBizImpl implements SignBiz {
 	@Override
 //	@Transactional(readOnly=true,propagation=Propagation.SUPPORTS)
 	public Sign findSignByFromUserName(Sign sign) {
-		Sign s = (Sign) baseDao.findOne(sign, "findSignByFromUserName");  //说明这句为空...？
+		Sign s = (Sign) baseDao.findOne(sign, "findSignByFromUserName"); 
 		if( s!=null ){
 			return s;
 		}
@@ -44,6 +46,15 @@ public class SignBizImpl implements SignBiz {
 	public void updateSign(Sign sign) {
 		baseDao.update(sign, "updateSign");  //返回空类型
 		
+	}
+
+	@Override
+	public List<Sign> findAllSign(Sign sign) {
+		List<Sign> list = baseDao.findAll(sign, "findAllSign");
+		if(list!=null&&list.size()>0) {
+			return list;
+		}
+		return null;
 	}
 
 

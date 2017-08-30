@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.DateBackUpRecordMapper">
+
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+
+	<!-- 排序条件的拼接 -->
+	<sql id="orderSql">
+		<if test="orderby!=null and orderby!=''">
+			order by #{orderby}
+			<if test="orderway!=null and orderway!=''">
+				#{orderway}
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 分页条件的拼接 -->
+	<sql id="pageSql">
+		<if test="start!=null">
+			limit #{start},#{pagesize}
+		</if>
+	</sql>
+
+	<!-- 插入数据库管理员操作 -->
+	<insert id="addDateBackUpRecordByOperator" parameterType="DateBackUpRecord" useGeneratedKeys="true" keyProperty="did">
+		insert into datebackuprecord(operator,filename,filepath,times,`type`) 
+		values(#{operator},#{filename},#{filepath},now(),#{type})
+	</insert>
+
+	<!-- 插入数据库系统自动操作操作 -->
+	<insert id="addDateBackUpRecordBySystem" parameterType="DateBackUpRecord" useGeneratedKeys="true" keyProperty="did">
+		insert into datebackuprecord(filename,filepath,times,`type`) 
+		values(#{filename},#{filepath},now(),#{type})
+	</insert>
+
+	<!-- 修改有效日期每天减一 -->
+	<update id="updateDateBackUpRecordDeadline">
+		update datebackuprecord set deadline = deadline-1
+	</update>
+	
+	<!-- 查找所有备份记录 -->
+	<select id="findAllDateBackUpRecord" resultType="DateBackUpRecord">
+		select * from datebackuprecord 		
+		<include refid="orderSql" />
+		<include refid="pageSql" />
+	</select>
+	
+	<!-- 根据文件路径删除文件 -->
+	<delete id="delDatabaseBackUpRecordByFilePath" parameterType="DateBackUpRecord">
+		delete from datebackuprecord where filepath = #{filepath}
+	</delete>
+	
+	<!-- 查找备份保留时间==0的，则删除 -->
+	<select id="findAllDateBackUpRecordWhereDeadline" resultType="DateBackUpRecord">
+		select * from datebackuprecord where deadline=0
+	</select>
+
+
+</mapper>

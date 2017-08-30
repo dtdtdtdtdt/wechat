@@ -34,5 +34,12 @@
 	</delete>
 
 
+	<!-- 查询一级和二级菜单共同查询 -->
+	<select id="findFirstAndSecondMenu" resultType="FirstMenuDb">
+		select f.type as type,f.name as fname,s.name as sname from firstmenu f 
+			left join secondmenu s on f.fid=s.fid
+	</select>
+	
+
 
 </mapper>

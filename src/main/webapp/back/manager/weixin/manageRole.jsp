@@ -125,33 +125,37 @@
 		// 返回被选中的行 然后集成的其实是 对象数组  
         var row = $('#menuTable').datagrid('getSelections');
 		var role=$("#role").val();
-        var i = 0;  
-        var strTitle = "";
-        var strMenu = "";
-        for(i;i<row.length;i++){
-            strTitle += row[i].mtitle;
-            strMenu += row[i].menu;
-            if(i < row.length-1){
-            	strTitle += ',';
-            	strMenu += ',';
-            }else{
-                break;  
+        if(role!=""){
+        	var i = 0;  
+            var strTitle = "";
+            var strMenu = "";
+            for(i;i<row.length;i++){
+                strTitle += row[i].mtitle;
+                strMenu += row[i].menu;
+                if(i < row.length-1){
+                	strTitle += ',';
+                	strMenu += ',';
+                }else{
+                    break;  
+                }
             }
+    		$.ajax({
+    			type : "POST",
+    			data : "role="+role+"&strTitle="+strTitle+"&strMenu="+strMenu,
+    			url : "back/addRole.action",
+    			dataType : "JSON",
+    			success : function(data) {
+    				if (data.code == 1) {
+    					alert("添加成功！");
+    					location.href = "back/manager/weixin/manageRole.jsp";
+    				} else {
+    					alert("添加失败！" + data.msg);
+    				}
+    			}
+    		});
+        }else{
+        	alert("角色名和权限不能为空!");
         }
-		$.ajax({
-			type : "POST",
-			data : "role="+role+"&strTitle="+strTitle+"&strMenu="+strMenu,
-			url : "back/addRole.action",
-			dataType : "JSON",
-			success : function(data) {
-				if (data.code == 1) {
-					alert("添加成功！");
-					location.href = "back/manager/weixin/manageRole.jsp";
-				} else {
-					alert("添加失败！" + data.msg);
-				}
-			}
-		});
 	}
 	
 </script>

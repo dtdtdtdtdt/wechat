@@ -1,22 +1,26 @@
 create database wechat;
-
+drop table admin;
 --管理员表
 create table admin(
     aid int primary key auto_increment,
     aname varchar(50),
-    apwd  varchar(50)
+    apwd  varchar(50),
+    atime datetime,
+    role varchar(50)
 );
-alter table admin add atime datetime not null;
-update admin set atime=now() where aname='c'
-insert into admin(aname,apwd) values('a','a');
+alter table admin add role varchar(50);
+update admin set role='root' where aname='x'
+insert into admin(aname,apwd,atime,role) values('a','a',now(),'root');
 select * from admin where role='root';
 
+select * from admin where aname = 'a'#' and apwd = '11'
 --菜单表
 create table menu(
 	mid int primary key auto_increment,
 	menu varchar(50),
 	mtitle varchar(50)
 );
+drop table menu;
 insert into menu(menu,mtitle) values('safeTree','安全权限');
 insert into menu(menu,mtitle) values('userTree','粉丝管理');
 insert into menu(menu,mtitle) values('messageTree','消息管理');
@@ -34,9 +38,9 @@ create table role(
     menu  varchar(50),
     mtitle varchar(50)
 );
+drop table role;
 select rid,role,group_concat(mtitle) as mtitle from role group by role order by rid;
 select rid,role,group_concat(mtitle) as mtitle from role where role='admin';
-drop table role;
 insert into role(role,menu,mtitle) values('root','safeTree','安全权限');
 insert into role(role,menu,mtitle) values('root','userTree','粉丝管理');
 insert into role(role,menu,mtitle) values('root','messageTree','消息管理');

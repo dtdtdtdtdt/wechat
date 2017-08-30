@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.WxshopOrderItemMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+		
+	<!-- 订单详情表 -->
+	<insert id="addWxshopOrderitem" parameterType="WxshopOrderItem" >
+		insert into wxshoporderitem(roid,fid,dealprice,num) values(#{roid},#{fid},#{dealprice},#{num})
+	</insert>
+
+	
+
+	
+
+</mapper>

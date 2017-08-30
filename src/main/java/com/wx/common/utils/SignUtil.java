@@ -50,7 +50,7 @@ public class SignUtil implements Serializable {
 				}
 				//应该为目前时间戳减去签到数据库凌晨时间戳
 				final  long missDays= (System.currentTimeMillis()- dtime)/(24*60*60*1000);  //连续签到则等于 1
-				System.out.println( missDays+"--------------------------" );
+				
 				//如果MissDays == 1  则说明前一天已经签到连续签到 
 				if( missDays == 1 ){
 					s.setSignCount( s.getSignCount()+1  ); //连续签到天数加一

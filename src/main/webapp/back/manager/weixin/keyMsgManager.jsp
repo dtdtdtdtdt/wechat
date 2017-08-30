@@ -18,7 +18,7 @@
 			rownumbers:"true",	 //显示行号
 			nowrap:"true",		//不换行显示
 			sortName:"ktype",		//排序的列 这个参数会传到后台的servlet上，所以要有后台对应的接收
-			sortOrder:"desc",   //排序方式
+			sortOrder:"asc",   //排序方式
 			singleSelect:true,
 			//以上的四种增删改查操作，只要失败，都会回调这个onError
 			onError:function(a,b){
@@ -150,26 +150,65 @@
 	
 	//文本和图文
 	function submitForm2(){
-		$('#ff').form('submit',{
-			onSubmit:function(){
-	        	//发送一个ajax请求
-				$.ajax({
-					type:"POST",
-					url:"back/keyMsgToReplyTexeAndNews.action",
-					data:$("#ff").serialize(),
-					dataType:"JSON",
-					success:function(data){
-						if(data.code==1){
-							alert("保存成功！");
-							location.href = "back/manager/weixin/keyMsgManager.jsp";
-						}else{
-							alert("失败，原因："+data.msg);
-						}
-					}
-				});
-				return $(this).form('enableValidation').form('validate');
-			}
-		});
+		// 先判断选择的是图文还是文本  0是文本 4是图文
+		var objS = document.getElementById("selectid2"); //通过id获得这个元素
+        var value = objS.options[objS.selectedIndex].value; //获得option中的值
+        if( value==0 ){
+        	var keywords1 = $("#keywords1").val();;
+        	var content1 = $("#content1").val();;
+        	if(keywords1!=null&&keywords1!=""&&content1!=null&&content1!=""){
+        		$('#ff').form('submit',{
+        			onSubmit:function(){
+        	        	//发送一个ajax请求
+        				$.ajax({
+        					type:"POST",
+        					url:"back/keyMsgToReplyTexeAndNews.action",
+        					data:$("#ff").serialize(),
+        					dataType:"JSON",
+        					success:function(data){
+        						if(data.code==1){
+        							alert("保存成功！");
+        							location.href = "back/manager/weixin/keyMsgManager.jsp";
+        						}else{
+        							alert("失败，原因："+data.msg);
+        						}
+        					}
+        				});
+        			}
+        		});
+        	}else{
+        		alert("关键字和回复内容不能为空！");
+        	}
+        }else if(value==4){
+        	var title1 = $("#title1").val();
+        	var description1 = $("#description1").val();
+        	var url1 = $("#url1").val();
+        	var picUrl1 = $("#picUrl1").val();
+        	if( title1!=""&&description1!=""&&url1!=""&&picUrl1!=""){
+        		$('#ff').form('submit',{
+        			onSubmit:function(){
+        	        	//发送一个ajax请求
+        				$.ajax({
+        					type:"POST",
+        					url:"back/keyMsgToReplyTexeAndNews.action",
+        					data:$("#ff").serialize(),
+        					dataType:"JSON",
+        					success:function(data){
+        						if(data.code==1){
+        							alert("保存成功！");
+        							location.href = "back/manager/weixin/keyMsgManager.jsp";
+        						}else{
+        							alert("失败，原因："+data.msg);
+        						}
+        					}
+        				});
+        			}
+        		});
+        	}else{
+        		alert("请把信息填写完整！");
+        	}
+        }
+
 	}
 	function clearForm2(){
 		$('#ff').form('clear');
@@ -186,7 +225,6 @@
 					dataType:"JSON",
 					success:function(data){
 						if(data.code==1){
-	
 							$('#p').progressbar('setValue', 100);
 							alert("成功");
 							location.href = "back/manager/weixin/keyMsgManager.jsp";
@@ -194,7 +232,7 @@
 							//clearForm();
 
 						}else{
-							alert("失败");
+							alert("失败！ "+data.msg);
 						}
 					} 
 			}); 
@@ -278,7 +316,7 @@
 					
 					<tr>
 		    			<td>关键字:</td>
-		    			<td><input type="text" class="easyui-textbox" data-options="required:true" name="keywords" style="width:200px;"></input></td>
+		    			<td><input type="text" id="keywords1" class="easyui-textbox" data-options="required:true" name="keywords" style="width:200px;"></input></td>
 		    		</tr>
 					
 					<tr>
@@ -293,31 +331,31 @@
 					
 					<tr id="textContent">
 		    			<td>文本回复内容:</td>
-		    			<td><input type="text" class="easyui-textbox" data-options="multiline:true,required:true" style="height:60px;width:200px;" name="Content" ></input></td>
+		    			<td><input type="text" id="content1" class="easyui-textbox" data-options="multiline:true,required:true" style="height:60px;width:200px;" name="Content" ></input></td>
 		    		</tr>
 					
 		    		<tr hidden="hidden" id="newsTitle">
 		    			<td>图文标题:</td>
 		    			<td>
-		    			<input type="text" class="easyui-textbox" data-options="required:true" name="title" style="width:200px;" ></input></td>
+		    			<input type="text" id="title1" class="easyui-textbox" data-options="required:true" name="title" style="width:200px;" ></input></td>
 		    		</tr>
 		    		
 		    		<tr hidden="hidden" id="newsDescription">
 		    			<td>图文描述:</td>
 		    			<td>
-		    			<input type="text" class="easyui-textbox" data-options="required:true" name="description" style="width:200px;" ></input></td>
+		    			<input type="text" id="description1" class="easyui-textbox" data-options="required:true" name="description" style="width:200px;" ></input></td>
 		    		</tr>
 					
 					<tr hidden="hidden" id="newsMessage">
 		    			<td>图文链接:</td>
 		    			<td>
-		    			<input type="text" class="easyui-textbox" data-options="required:true" name="url" style="width:200px;" ></input></td>
+		    			<input type="text" id="url1" class="easyui-textbox" data-options="required:true" name="url" style="width:200px;" ></input></td>
 		    		</tr>
 		    		
 		    		<tr hidden="hidden" id="newsMessage2">
 		    			<td>推文封面图片链接</td>
 		    			<td>
-		    			<input type="text" class="easyui-textbox" data-options="required:true" name="picUrl" style="width:200px;" ></input></td>
+		    			<input type="text" id="picUrl1" class="easyui-textbox" data-options="required:true" name="picUrl" style="width:200px;" ></input></td>
 		    		</tr>
 		    	</table>
 		    </form>

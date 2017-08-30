@@ -39,8 +39,8 @@ public class KeyReplyBizImpl implements KeyReplyBiz {
 	
 	//查找所有关键字
 	@Override
-	public List<KeyReply> findAllKeyWords() {
-		List<KeyReply> list = baseDao.findAll(new KeyReply(), "findAllKeyWords");
+	public List<KeyReply> findAllKeyWords(KeyReply KeyReply) {
+		List<KeyReply> list = baseDao.findAll(KeyReply, "findAllKeyWords");
 		if( list!=null&&list.size()>0){
 			return list;
 		}

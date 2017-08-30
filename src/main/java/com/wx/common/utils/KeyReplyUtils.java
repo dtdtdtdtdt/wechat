@@ -29,7 +29,7 @@ public class KeyReplyUtils implements Serializable{
         text.setMsgType("text");     //返回的类型
         text.setCreateTime(  new Date().getTime() );
         //内容需要拿过来使用
-        text.setContent("关键字回复:\n"+kr.getContent());	
+        text.setContent(kr.getContent());	
         String message = XmlAndMap.textMessageToXml(text);
         out.print(message);
         out.flush();

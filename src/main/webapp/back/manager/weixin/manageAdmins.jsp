@@ -187,20 +187,26 @@
 	});
 	
 	function add() {
-		$.ajax({
-			type : "POST",
-			data : $("#adminForm").serialize(),
-			url : "back/addAdmins.action",
-			dataType : "JSON",
-			success : function(data) {
-				if (data.code == 1) {
-					alert("添加成功！");
-					location.href = "back/manager/weixin/manageAdmins.jsp";
-				} else {
-					alert("添加失败！" + data.msg);
+		var aname=$().val();
+		var apwd=$().val();
+		if(aname!=""&&apwd!=""){
+			$.ajax({
+				type : "POST",
+				data : $("#adminForm").serialize(),
+				url : "back/addAdmins.action",
+				dataType : "JSON",
+				success : function(data) {
+					if (data.code == 1) {
+						alert("添加成功！");
+						location.href = "back/manager/weixin/manageAdmins.jsp";
+					} else {
+						alert("添加失败！" + data.msg);
+					}
 				}
-			}
-		});
+			});
+		}else{
+			alert("用户名和密码不能为空！");
+		}
 	}
 	
 	$.extend($.fn.validatebox.defaults.rules, {
