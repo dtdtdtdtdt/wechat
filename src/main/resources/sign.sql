@@ -7,16 +7,6 @@ drop table sign
 --最后修改时间（签到）
 --签到历史    用来记录签到天数对应的积分
 --ext预留
-drop table testt
-create table testt(
-	tid int primary key auto_increment,
-	timet date,
-	timett datetime
-)
-insert into testt(timet,timett) values(now(),now())
-select * from testt
-
-
 create table sign(
 	sid int primary key auto_increment,
 	fromUserName varchar(50),   		
@@ -44,15 +34,19 @@ where fromUserName ='oeFt8wYmSWPGqc8BJKxBQDU_px7U'
 
 
 
+show tables   Tables_in_wechat
+
+select table_name from information_schema.tables where table_schema='csdb' and table_type='base table';
 
 
 
+select TABLE_NAME as tname from INFORMATION_SCHEMA.TABLES  where TABLE_SCHEMA = 'wechat'
+
+select * from sign order by integration desc
 
 
 
-
-
-
+select * from sign where 1=1 limit 1,2
 
 
 

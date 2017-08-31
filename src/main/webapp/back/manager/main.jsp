@@ -7,12 +7,22 @@
 				{
 					"text" : "用户管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp' />"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageAdmins.jsp'/>"
 					}
 				},{
 					"text" : "角色管理",
 					"attributes" : {
-						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageRole.jsp' />"
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/manageRole.jsp'/>"
+					}
+				},{
+					"text" : "数据安全备份",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUp.jsp'/>"
+				    }
+			    },{
+					"text" : "数据备份记录",
+					"attributes" : {
+						"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/dateBackUpRecord.jsp'/>"
 					}
 				}];
 
@@ -20,7 +30,7 @@
 			{
 				"text" : "关注消息",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/subscribeReply.jsp'/>"
 				}
 			},
 			{
@@ -62,13 +72,19 @@
 			{
 				"text" : "查看粉丝",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp' />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/findUsers.jsp'/>"
 				}
 			},
 			{
 				"text" : "粉丝统计",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/showChart.jsp' />"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/showChart.jsp'/>"
+				}
+			},
+			{
+				"text" : "粉丝签到数据",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/signManager.jsp'/>"
 				}
 			}];
 		
@@ -84,25 +100,25 @@
 			{
 				"text" : "机器人",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/robotStatus.jsp'/>"
 				}
 			},
 			{
 				"text" : "微信墙",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/weixin/wxwallStatus.jsp'//>"
 				}
 			},
 			{
 				"text" : "游戏",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
+					"url" : "<iframe width='40%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
 				}
 			},
 			{
 				"text" : "抽奖赚积分",
 				"attributes" : {
-					"url" : "<iframe width='40%' height='100%' src='ward.jsp' />"
+					"url" : "<iframe width='40%' height='100%' src='ward.jsp'/>"
 				}
 			},
 			{
@@ -112,12 +128,47 @@
 				}
 			}];
 		
+		var shopTree = [
+			{
+				"text" : "会员中心",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "积分管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "金库管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "商品管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "优惠券管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "最新活动",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			}];
+		
+		
 		showTree("safeTree", safeTree);
 		showTree("messageTree", messageTree);
 		showTree("sourceTree", sourceTree);
 		showTree("userTree", userTree);
 		showTree("menuTree", menuTree);
 		showTree("smallTree", smallTree);
+		showTree("shopTree", shopTree);
 	});
 
 	function showTree(treeId, data) {
@@ -149,9 +200,16 @@
 					}
 				} ],
 				content : node.attributes.url
-			})
+			});
 		}
 	};
+	
+
+
+	
+	
+	
+	
 </script>
 
 </head>
@@ -174,11 +232,13 @@
 	</div>
 
 	<div data-options="region:'east',split:true" title="工具箱"  style="width:187px;">
-		<div class="easyui-calendar" style="width: 100%;height: 40%"></div>
-		<!-- <div id="p" class="easyui-panel" title="后台用户菜单预览" style="width: 100%;height:50%;">
-			
-		</div> -->
+		<div class="easyui-calendar" style="width: 30%, height: 40%"></div>
 		<a onClick="closeAll()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'">关闭所有窗口</a>
+		<br/>
+		<br/>
+		   
+	
+		
 	</div>
 	<div data-options="region:'west',split:true,state:closed" title="菜单" style="width: 150px;">
 		<div class="easyui-accordion" style="width: 143px; height: 350px;">

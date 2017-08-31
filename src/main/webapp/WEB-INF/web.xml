@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance   
+	http://www.springmodules.org/schema/cache/springmodules-cache.xsd 
+	http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd"
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	metadata-complete="true" version="3.0">
@@ -28,10 +30,23 @@
 		<filter-name>rightFilter</filter-name>
 		<filter-class>com.wx.common.web.filters.RightFilter</filter-class>
 	</filter>
+	<!-- 微信shop权限 -->
+
+	<filter>
+		<filter-name>wxShopRightFilter</filter-name>
+		<filter-class>com.wx.common.web.filters.WxShopRightFilter</filter-class>
+	</filter>
+
 	<filter-mapping>
 		<filter-name>rightFilter</filter-name>
 		<url-pattern>/back/*</url-pattern>
 	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>wxShopRightFilter</filter-name>
+		<url-pattern>/shop/jsp/*</url-pattern>
+	</filter-mapping>
+
 	<filter-mapping>
 		<filter-name>characterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -61,4 +76,15 @@
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
+	<error-page>
+	    <error-code>404</error-code>
+	    <location>/404.jsp</location>
+	 </error-page>
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>/500.jsp</location>
+	 </error-page>
+
+
+	
 </web-app>

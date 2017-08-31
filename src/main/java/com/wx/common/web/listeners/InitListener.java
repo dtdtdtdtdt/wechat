@@ -29,6 +29,15 @@ public class InitListener implements ServletContextListener{
 		// 利用spring提代的 WebApplicationContextUtils类来获取 spring 容器
 		ac = WebApplicationContextUtils.getWebApplicationContext(application);
 		AccessTokenZpBiz atb=(AccessTokenZpBiz) ac.getBean("accessTokenZpBizImpl");
+		if( atb.serachAccessToken()==null ) {
+			try {
+				AccessTokenZp atz = WeixinUtil.getAccessToken();
+				atb.addAccessToken(atz);
+			} catch (ParseException | IOException e) {
+				System.out.println("AccessToken获取失败！请检查网络" );
+				e.printStackTrace();
+			}
+		}
 		try {
 			atb.updateAccessToken();
 		} catch (Exception e) {

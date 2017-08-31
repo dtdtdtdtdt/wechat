@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.RobotMapper">
+
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+
+
+	<!-- 第一次则插入数据库 -->
+	<insert id="addRobotUser" parameterType="Robot">
+		insert into robot(fromUserName ) values(#{fromUserName})
+	</insert>
+
+
+	<!-- 更新使用机器人状态 退出-->
+	<update id="updateRobotUserOut" parameterType="Robot">
+		update robot set status = 0 where fromUserName =#{fromUserName} 
+	</update>
+	
+	<!-- 更新使用机器人状态 上线-->
+	<update id="updateRobotUserLogin" parameterType="Robot">
+		update robot set status = 1 where fromUserName =#{fromUserName} 
+	</update>
+
+
+	<!-- 查询 -->
+	<select id="findRobotUser" resultType="Robot">
+		select * from robot where fromUserName =#{fromUserName}
+	</select>
+
+
+</mapper>

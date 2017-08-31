@@ -74,12 +74,13 @@ insert into secondmenu(`type`,name,`key`,url,fid) values('location_select','å‘é
 
 
 
-select f.fid,f.name,s.name,s.type,s.url from firstmenu f 
+select f.type as `type` ,f.name as fname,s.name as sname from firstmenu f 
 left join secondmenu s on f.fid=s.fid
 
 
 
 
+ 
 
 
 

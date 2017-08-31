@@ -44,7 +44,6 @@ public class SignUtil implements Serializable {
         		long dtime = 0;
 				try {
 					dtime = CommonDateUtils.getDateBaseTimeStamp(  s.getLastModifytime().toString() );
-//					dtime = CommonDateUtils.StrDateFormat(  s.getLastModifytime().toString() ).getTime();
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}

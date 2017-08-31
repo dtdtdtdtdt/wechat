@@ -14,7 +14,25 @@ public class FirstMenuDb implements Serializable {
 	private String url;
 	private String event;
 
+	//用户菜单实时显示  一级菜单二二级菜单名
+	private String fname;
+	private String sname;
 	
+	
+	
+	
+	public String getFname() {
+		return fname;
+	}
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
 	public void setFid(Integer fid) {
 		this.fid = fid;
 	}

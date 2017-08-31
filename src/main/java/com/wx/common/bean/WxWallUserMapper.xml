@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.common.bean.WxWallUserMapper">
+
+	<!-- 加入缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+	</cache>
+
+
+	<!-- 第一次则插入数据库 -->
+	<insert id="addWxWallUser" parameterType="WxWallUser">
+		insert into wxwalluser(fromUserName) values(#{fromUserName})
+	</insert>
+
+
+	<!-- 更新使用微信墙用户的使用状态 -->
+	<update id="updateWxWallUserStatus" parameterType="WxWallUser">	
+		update wxwalluser set status = #{status}  where fromUserName = #{fromUserName}
+	</update>
+
+	<!-- 查询 -->
+	<select id="findWxWallUserByFromUserName" resultType="WxWallUser">
+		select * from wxwalluser where fromUserName = #{fromUserName}
+	</select>
+
+
+</mapper>

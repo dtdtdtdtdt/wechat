@@ -124,7 +124,7 @@ public class MakeMenuController {
 		
 //		Button button[] = new Button[2];      // 2	这种方式不行  为什么？
 		List<Button> buttonList = new ArrayList<Button>();
-		//含有二级菜单的  现在一级菜单中查找是否有二级菜单 		先设定一个含有子菜单的    现在处理多个二级菜单的情况。。。。啊啊啊哦哦哦
+		//含有二级菜单的  先在一级菜单中查找是否有二级菜单 		先设定一个含有子菜单的    现在处理多个二级菜单的情况。。。。啊啊啊哦哦哦
 		//cb存了所有一级菜单中的点击菜单    获取一级菜单中有二级菜单的菜单
 		if(cb!=null&&cb.size()>0){
 			for( int i=0;i<cb.size();i++ ){  // 2
@@ -138,32 +138,44 @@ public class MakeMenuController {
 				}
 			}
 		}
-		//所有二级菜单 都视为跳转菜单	二级
-		for(int m=0;m<smdb.findSecondCountGroupBy().size();m++){   //  长度为 2
-			if(secondList!=null&&secondList.size()>0){
-				//应该获取二级菜单的有效数量 即 每个一级菜单对应的二级菜单数量
-				List<SecondMenuDb> secondMenuList = smdb.findSecondCountGroupBy(); // 两组每组有信息 fid  count
+		//所有二级菜单 都视为跳转菜单	二级     升级功能？让二级菜单支持点击事件  
+		//TODO: 暂时不要升级功能！
+		List<SecondMenuDb> secondMenu = smdb.findSecondCountGroupBy();
+		if( secondMenu!=null&&secondMenu.size()>0 ){
+			for(int m=0;m<smdb.findSecondCountGroupBy().size();m++){   //  长度为 2
+				if(secondList!=null&&secondList.size()>0){
+					//应该获取二级菜单的有效数量 即 每个一级菜单对应的二级菜单数量
+					List<SecondMenuDb> secondMenuList = smdb.findSecondCountGroupBy(); // 两组每组有信息 fid  count
 
-				//取出子菜单的数量  分组后
-				for( int h=0;h<secondMenuList.size();h++ ){ // 2
-					Button butt = buttonList.get(h);
-					SecondMenuDb sm = secondMenuList.get(h);  //有价值的是fid 
-					//根据fid查出所对应的所有二级菜单
-					List<SecondMenuDb> secondMenuByFid = smdb.findAllSecondMenuByFid(sm);
-					ViewButton [] secondButton = new ViewButton[ sm.getCount() ]; // 3  2
-					//把
-					for(  int i = 0;i<  sm.getCount()  ;i++){
-							SecondMenuDb smd= secondMenuByFid.get(i );   
-							ViewButton v = new ViewButton();
-							v.setName(smd.getName());
-							v.setType("view");
-							v.setUrl(smd.getUrl());
-							secondButton[i] = v;
-					}
-					butt.setSub_button( secondButton ); 
-				}	
+					//取出子菜单的数量  分组后
+					for( int h=0;h<secondMenuList.size();h++ ){ // 2
+						Button butt = buttonList.get(h);
+						SecondMenuDb sm = secondMenuList.get(h);  //有价值的是fid 
+						//根据fid查出所对应的所有二级菜单
+						List<SecondMenuDb> secondMenuByFid = smdb.findAllSecondMenuByFid(sm);
+						ViewButton [] secondButton = new ViewButton[ sm.getCount() ]; // 3  2
+						//点击菜单
+//						ClickButton [] secondClickButton = new ClickButton[];
+						
+						//把
+						for(  int i = 0;i<  sm.getCount()  ;i++){
+								SecondMenuDb smd= secondMenuByFid.get(i );   
+								
+								ViewButton v = new ViewButton();
+								v.setName(smd.getName());
+								v.setType("view");
+								v.setUrl(smd.getUrl());
+								secondButton[i] = v;
+						}
+						butt.setSub_button( secondButton ); 
+					}	
+				}
 			}
 		}
+
+
+
+
 
 
 		//最终的菜单只能有三个一级菜单  					所有一级菜单的总数量
@@ -191,7 +203,7 @@ public class MakeMenuController {
 		
 		//转json数据结构
 		JSONObject  jsonObject = JSONObject.fromObject(menu);
-		System.out.println( jsonObject.toString() );
+//		System.out.println( jsonObject.toString() );
 
 		String ACCESS_TOKEN = GetAccessToken.getAT(accessTokenZpBiz);
 		//先删除菜单
@@ -201,14 +213,12 @@ public class MakeMenuController {
 		String outStr = jsonObject.toString();
 		String url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+ACCESS_TOKEN;
 		JSONObject  jo = WeixinUtil.doPostStr(url, outStr);
-		System.out.println( jo.getInt("errcode") );
+//		System.out.println( jo.getInt("errcode") );
 		if( jo.getInt("errcode")==0 ){
-			System.out.println( "创建菜单成功" );
 			jm.setCode(1);
 		}else{
-			System.out.println("失败");
 			jm.setCode(0);
-			jm.setMsg("失败");
+			jm.setMsg("失败"+jo.getInt("errcode"));
 		}
 		return jm;
 	}

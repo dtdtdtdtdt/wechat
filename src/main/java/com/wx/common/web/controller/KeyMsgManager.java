@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -29,12 +30,17 @@ public class KeyMsgManager {
 	
 	
 	@RequestMapping("/back/findAllKeyWords.action")
-	public void findAllKeyWords(HttpServletResponse response){
+	public void findAllKeyWords(HttpServletResponse response,HttpServletRequest request,KeyReply keyReply,@RequestParam(value="page",required=false) String page){
+		//用于排序
+		keyReply.setOrderby(  request.getParameter("sort")   );
+		keyReply.setOrderway(  request.getParameter("order")  );
+		Integer pagesize = Integer.parseInt(  request.getParameter("rows")    );
+		keyReply.setPagesize(  pagesize );
+		Integer start = (Integer.parseInt(page)-1)*pagesize;
+		keyReply.setStart( start  );
 		
 		
-		List<KeyReply> list = keyReplyBiz.findAllKeyWords();
-
-
+		List<KeyReply> list = keyReplyBiz.findAllKeyWords(keyReply);
 		Gson gson=new Gson();
 		int count=keyReplyBiz.findKeyWordsCount();
 		//easyui要求的格式

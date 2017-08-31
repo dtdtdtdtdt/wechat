@@ -8,6 +8,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<cache type="org.mybatis.caches.ehcache.LoggingEhcache">
 	</cache>
 	
+		<!-- 排序条件的拼接 -->
+	<sql id="orderSql">
+		<if test="orderby!=null and orderby!=''">
+			order by #{orderby}
+			<if test="orderway!=null and orderway!=''">
+				#{orderway}
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 分页条件的拼接 -->
+	<sql id="pageSql">
+		<if test="start!=null">
+			limit #{start},#{pagesize}
+		</if>
+	</sql>
+	
 	
 	<!-- 插入数据关键字  -->
 	<insert id="addKeyWords">
@@ -32,7 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查找所有关键字    包括查找关键字数量  就是查找所有关键字！-->
 	<select id="findAllKeyWords"   resultType="KeyReply">
 		
-	select * from keyreply
+	select * from keyreply  		
+		<include refid="orderSql" />
+		<include refid="pageSql" />
 	</select>
 
 	<!-- //根据kid删除关键字 -->

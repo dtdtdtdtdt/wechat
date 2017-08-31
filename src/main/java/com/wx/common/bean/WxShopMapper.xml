@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.common.bean.WxShopMapper">
+	<!-- 加入带日志的ehcache缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	
+	
+	<!-- 排序条件的拼接 -->
+	<sql id="orderSql">
+		<if test="orderby!=null and orderby!=''">
+			order by #{orderby}
+			<if test="orderway!=null and orderway!=''">
+				#{orderway}
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 分页条件的拼接 -->
+	<sql id="pageSql">
+		<if test="start!=null">
+			limit #{start},#{pagesize}
+		</if>
+	</sql>
+	
+	
+	<!-- 查询所有菜品 -->
+	<select id="findAllWxShop" resultType="WxShop">
+		select * from wxshop
+	</select>
+	
+	
+		<!-- 查询所有菜品 -->
+	<select id="findWxShopById" resultType="WxShop">
+		select * from wxshop where fid=#{fid}
+	</select>
+
+
+
+
+
+	
+
+</mapper>

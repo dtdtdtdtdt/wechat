@@ -51,7 +51,7 @@ java.awt.image.*,java.util.*,javax.imageio.*"%>
 	g.dispose();
 	ImageIO.write(image, "JPEG", response.getOutputStream());
 
-	//TODO: 解决流的异常
+	// 解决流的异常
 	out.clear();
 	out = pageContext.pushBody();
 %>

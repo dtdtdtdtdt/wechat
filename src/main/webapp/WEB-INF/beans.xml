@@ -97,10 +97,20 @@
 	<!-- spring mvc 视图解析器 , 访问的页面都在 /page/xxx.jsp -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="0" />  
 		<property name="prefix" value="/back/manager/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 
+	<bean id="jspViewResolver2"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1" />  
+		<property name="prefix" value="/shop/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	
+	
 	<!-- 多部分文件上传 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	     <property name="maxUploadSize" value="104857600" />

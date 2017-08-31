@@ -66,6 +66,16 @@ public class FirstMenuDbBizImpl implements FirstMenuDbBiz {
 		
 		
 	}
+
+	//查询一级和二级菜单共同查询
+	@Override
+	public List<FirstMenuDb> findFirstAndSecondMenu() {
+		List<FirstMenuDb> list = baseDao.findAll(new FirstMenuDb(), "findFirstAndSecondMenu");
+		if(list!=null&&list.size()>0) {
+			return list;
+		}
+		return null;
+	}
 	
 	
 

@@ -21,25 +21,39 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wx.common.bean.FirstMenuDb;
 import com.wx.common.bean.KeyReply;
+import com.wx.common.bean.Robot;
+import com.wx.common.bean.RobotStatus;
 import com.wx.common.bean.SecondMenuDb;
 import com.wx.common.bean.Sign;
+import com.wx.common.bean.SubscribeReply;
 import com.wx.common.bean.UserLx;
+import com.wx.common.bean.WxWallStatus;
+import com.wx.common.bean.WxWallUser;
 import com.wx.common.biz.AccessTokenZpBiz;
 import com.wx.common.biz.FirstMenuDbBiz;
 import com.wx.common.biz.KeyReplyBiz;
+import com.wx.common.biz.RobotBiz;
+import com.wx.common.biz.RobotStatusBiz;
 import com.wx.common.biz.SecondMenuDbBiz;
 import com.wx.common.biz.SignBiz;
+import com.wx.common.biz.SubscribeReplyBiz;
+import com.wx.common.biz.WxWallStatusBiz;
+import com.wx.common.biz.WxWallUserBiz;
 import com.wx.common.utils.CheckUtil;
 import com.wx.common.utils.CommonDateUtils;
 import com.wx.common.utils.KeyReplyUtils;
 import com.wx.common.utils.SignUtil;
+import com.wx.common.utils.TulingRobot;
 import com.wx.common.utils.WxSignNewsMsg;
-import com.wx.common.utils.WxWallUtil;
+import com.wx.common.utils.WxTemplateUtil;
+import com.wx.common.utils.WxWallTemplateUtil;
 import com.wx.common.utils.XmlAndMap;
 import com.wx.message.Image;
 import com.wx.message.ImageMessage;
 import com.wx.message.TextMessage;
 import com.wx.user.biz.UserBiz;
+
+import io.goeasy.GoEasy;
 
 @Controller
 public class WeixinController {
@@ -61,8 +75,23 @@ public class WeixinController {
 	
 	@Resource(name="secondMenuDbBizImpl")
 	private SecondMenuDbBiz secondMenuDbBiz;
+
+	@Resource(name="subscribeReplyBizImpl")
+	private SubscribeReplyBiz subscribeReplyBiz;
+	
+	@Resource(name="robotBizImpl")
+	private RobotBiz robotBiz;
+	
+	@Resource(name="robotStatusBizImpl")
+	private RobotStatusBiz robotStatusBiz;
+	
+	// 用于微信墙用户处理
+	@Resource(name="wxWallUserBizImpl")
+	private WxWallUserBiz wxWallUserBiz;
 	
 	
+	@Resource(name="wxWallStatusBizImpl")
+	private WxWallStatusBiz wxWallStatusBiz;
 	
 	
 	// 微信服务器认证发送一条get请求
@@ -124,16 +153,44 @@ public class WeixinController {
 					ub.addUser(userLx);
 				}
 				//关注时推送！
-	            TextMessage text = new TextMessage();
-	            text.setToUserName(fromUserName);
-	            text.setFromUserName(toUserName); 
-	            text.setMsgType("text");     //返回的类型
-	            text.setCreateTime(  new Date().getTime() );
-	            text.setContent("欢迎来到刘翔的测试号!谢谢合作");	
-	            message = XmlAndMap.textMessageToXml(text);
-		        out.print(message);
-		        out.flush();
-		        out.close();
+				//先查找关注回复设置 
+				List<SubscribeReply> list = subscribeReplyBiz.allSubscribeReply();
+				if( list!=null&&list.size()>0 ){
+					for( SubscribeReply sr : list ){
+        	        	KeyReply  kr =  keyReplyBiz.findKeyWords( sr.getKeywords()  ); 
+        	        	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+        	        	if(kr!=null){
+        	        		//根据类型判断进行回复
+        	        		switch(kr.getKtype()){
+        	        			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+        		        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+        		        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+        		        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+        		        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out);  break;
+        	        		}
+        	        	}
+					}
+					
+				}else{ // 默认为这个！
+		        	UserLx userL = new UserLx();
+		        	userLx.setOpenid(fromUserName);
+		        	UserLx user = ub.findUser(userLx);
+		        	
+		            TextMessage text = new TextMessage();
+		            text.setToUserName(fromUserName);
+		            text.setFromUserName(toUserName); 
+		            text.setMsgType("text");     //返回的类型
+		            text.setCreateTime(  new Date().getTime() );
+		            text.setContent("你好"+  user.getNickname()  +"\n欢迎来到诺亚方舟,等候多时了哦~");	
+		            message = XmlAndMap.textMessageToXml(text);
+			        out.print(message);
+			        out.flush();
+			        out.close();
+				}
+				
+				
+				
+
         	}else if(Event.equals("unsubscribe")){
         		//取消关注时更新用户信息
 				UserLx userLx=new UserLx();
@@ -172,7 +229,7 @@ public class WeixinController {
             			}
             			
             		}
-        			
+            		
         		}
 
         		//所有二级菜单
@@ -222,34 +279,121 @@ public class WeixinController {
         		
 			}
         }else if(msgType.equals("text")){ // 文本信息
-        	//首先判断该用户是否进入微信墙模式   一会搞定...
+        	// 用于微信墙获取用户头像和发送的内容!
+        	UserLx userLx = new UserLx();
+        	userLx.setOpenid(fromUserName);
+        	UserLx user = ub.findUser(userLx);
+        	KeyReply  kr2 = null;
+        	//微信墙功能
+        	WxWallStatus ws = wxWallStatusBiz.findWxWallStatus();
         	
-        	
-        	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
-        	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
-        	if(kr!=null){
-        		//根据类型判断进行回复
-        		switch(kr.getKtype()){
-        			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
-	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
-	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
-	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
-	        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
-        		}
-        	}
-        	//如果发送的文本是  微信墙则绑定微信墙功能！  
-        	//处理思路   新建一张表  用于存取上墙的用户   以后就可以抽奖操作
-        	if( content.equals("微信墙") ){
-        		WxWallUtil.sendServiceMsg(fromUserName, accessTokenZpBiz);
-        	}
-        	//存在session中
-    		ServletContext application = req.getServletContext();
-    		application.setAttribute("my", content);
-    	
-        
-    		
+        	//先判断是否有启用机器人功能
+        	RobotStatus rs = robotStatusBiz.findRobotStatus();
+        	//启用了机器人
+        	if(rs!=null&&rs.getStatus()==1){
+            	Robot r = robotBiz.findRobotUser( fromUserName );
+            	// 第一次使用机器人
+            	if( content.equals("机器人") ){
+            		//判断是否使用过机器人...
+            		if(r==null){
+                		robotBiz.addRobotUser(fromUserName);
+                		//推送一条绑定机器人成功的信息！
+                		WxTemplateUtil.sendRobotLoginTemplate(fromUserName, accessTokenZpBiz);
+            		}else{ //更改状态为1
+            			if( r.getStatus()!=1 ){//如果是进入机器人模式后 再次回复机器人  就不要推送了
+                    		//推送一条绑定机器人成功的信息！
+                    		WxTemplateUtil.sendRobotLoginTemplate(fromUserName, accessTokenZpBiz);
+            			}
+            			robotBiz.updateRobotUserLogin(fromUserName);
+            		}
+            	}
+            	if( r!=null&&r.getStatus()==1 ){ // 正在使用机器人
+            		if( content.equals("退出机器人")){
+            			robotBiz.updateRobotUserOut(fromUserName); // 修改状态值为  0 则退出了机器人
+            			//推送一条信息退出机器人
+            			WxTemplateUtil.sendRobotOutTemplate(fromUserName, accessTokenZpBiz);
+            			return ;
+            		}
+            		
+            		// 调用图灵机器人
+            		String reply = TulingRobot.Msg(content);
+    	            TextMessage text = new TextMessage();
+    	            text.setToUserName(fromUserName);
+    	            text.setFromUserName(toUserName); 
+    	            text.setMsgType("text");     //返回的类型
+    	            text.setCreateTime(  new Date().getTime() );
+    	            text.setContent( reply );	
+    	            String message = XmlAndMap.textMessageToXml(text);
+    		        out.print(message);
+    		        out.flush();
+    		        out.close();
 
+            		
+            	}
+        	}
+        	if( ws!=null&&ws.getStatus()==1 ){
+            	//如果发送的文本是  微信墙则绑定微信墙功能！  
+            	//处理思路   新建一张表  用于存取上墙的用户   以后就可以抽奖操作
+            	WxWallUser wwu = wxWallUserBiz.findWxWallUserByFromUserName(fromUserName);
+            	if( content.equals("微信墙") ){
+                	//第一次使用
+                	if(wwu==null) {
+                		WxWallUser wxWallUser = new WxWallUser();
+                		wxWallUser.setFromUserName(fromUserName);
+                		wxWallUserBiz.addWxWallUser(wxWallUser);
+                		//推送一条绑定微信墙成功的信息
+                		WxWallTemplateUtil.sendWxWallLogin(fromUserName, accessTokenZpBiz);
+                	}else { //更改使用状态
+                		if( wwu.getStatus()!=1 ) { //已经进入微信墙状态
+                       		//推送一条绑定微信墙成功的信息
+                    		WxWallTemplateUtil.sendWxWallLogin(fromUserName, accessTokenZpBiz);
+                		}
+            			wwu.setStatus(1);
+            			wxWallUserBiz.updateWxWallUserStatus(wwu);
+                	}
+            		
+            	}
+            	//正在使用微信墙
+            	if( wwu!=null&&wwu.getStatus()==1 ) {
+            		if( content.equals("退出微信墙") ) {
+            			//修改状态为0
+            			wwu.setStatus(0);
+            			wxWallUserBiz.updateWxWallUserStatus(wwu);
+            			//发送一条退出成功的信息
+            			WxWallTemplateUtil.sendWxWallOut(fromUserName, accessTokenZpBiz);
+            			return;
+            		}
+            		//反馈用户上墙成功
+            		KeyReplyUtils.successWxWall(kr2, toUserName, fromUserName, out);
+            		//字符串截取一下
+            		if( content.length()>=13 ) {
+            			content = content.substring(0, 13);
+            		}                	//使用goeasy推送到前端页面！
+            		GoEasy goEasy = new GoEasy("BC-e44baa9b32d64f40abf5cddeffa3aa54");
+            		goEasy.publish("BS-8ecca8bee3204a06a16f5d584262bee0",user.getNickname()+":"+content+"#$"+user.getHeadimgurl() );  
+            	}
+        	}
         	
+        	//微信墙未开启    机器人也可以触发关键字回复
+        	if( ws!=null&&ws.getStatus()==0 ) {
+            	//文本关键字回复功能
+            	KeyReply  kr =  keyReplyBiz.findKeyWords(content); //根据用户发的信息查询(关键字)回复内容
+            	//根据kr的ktype判断   0为文本 1为 图片 2 语音 3 视频
+            	if(kr!=null){
+            		//根据类型判断进行回复
+            		switch(kr.getKtype()){
+            			case 0: KeyReplyUtils.keyReplyText(kr, toUserName, fromUserName, out);  break;
+    	        		case 1: KeyReplyUtils.keyReplyImage(kr, toUserName, fromUserName, out); break;
+    	        		case 2: KeyReplyUtils.keyReplyVoice(kr, toUserName, fromUserName, out); break;
+    	        		case 3: KeyReplyUtils.keyReplyVideo(kr, toUserName, fromUserName, out); break;
+    	        		case 4: KeyReplyUtils.keyReplyNews(kr, toUserName, fromUserName, out); break;
+            		}
+            	
+            	}
+        	}
+        	
+        	
+
 
         }
 	}

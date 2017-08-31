@@ -91,11 +91,8 @@ public class KeyMsgToReplyController {
 	@RequestMapping(value="/back/keyMsgToReply.action")
 	public JsonModel keyMsgToReplyImg(KeyReply keyReply,HttpServletRequest request,HttpServletResponse resp,@RequestParam("file")CommonsMultipartFile file2) throws ServletException,IOException, ParseException, java.text.ParseException, KeyManagementException, NoSuchAlgorithmException, NoSuchProviderException{
 		JsonModel jm = new JsonModel();
-		
 		//媒体id设置为全局变量
 		String mediaId = null;
-		
-		
 		
 		//文件大小必须限制
 		long fileSize = file2.getSize();
@@ -130,9 +127,6 @@ public class KeyMsgToReplyController {
 				  break;
 		}
 		
-
-		
-		
 		
         long  startTime=System.currentTimeMillis();
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
@@ -157,24 +151,31 @@ public class KeyMsgToReplyController {
                {
             	  
             	   String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            	 
-				   //取出tomcat路径
-				   Calendar c=Calendar.getInstance();
-				   String tomcatdir=request.getRealPath("/");
-				   File tomcatFile=new File(tomcatdir);
-				   File webapppath=tomcatFile.getParentFile();
-					
-				   File picpath=new File(webapppath,"wxpic"+File.separator+c.get(Calendar.YEAR)+
-							File.separator+(c.get(Calendar.MONTH)+1)+File.separator+fileName+last);
-            	   String filepath = picpath.toString();
+
+	   				// 取tomcat路径
+	   			   Calendar c = Calendar.getInstance();
+	   			   String tomcatdir = request.getRealPath("/");
+	   			   File tomcatFile = new File(tomcatdir);
+	   			   File webapppath = tomcatFile.getParentFile();
             	   
+				   File picpath = new File(webapppath, "wxpic" + File.separator + c.get(Calendar.YEAR) + File.separator
+							+ (c.get(Calendar.MONTH) + 1) + File.separator+fileName+last);
+				  
+				   File filePath = new File(picpath.toString().substring(0, picpath.toString().lastIndexOf("\\")));
+				 
+            	   
+				   if (filePath.exists() == false) {
+					   filePath.mkdirs();
+				   }
+            	   
+				   String path = picpath.toString();
                    //上传 到指定磁盘
-                   file.transferTo(new File(filepath)); 
+                   file.transferTo(  picpath );
                    //在上传到微信服务器！
                    String access_token = GetAccessToken.getAT(accessTokenZpBiz);
-                   mediaId = WeixinUtil.upload(filepath, access_token, msgType);
+                   mediaId = WeixinUtil.upload(path, access_token, msgType);
                    //此id需要存数据库
-                   System.out.println( "上传完成"+mediaId );
+//                   System.out.println( "上传完成"+mediaId );
                    keyReply.setMediaId(mediaId);
                    //保存到数据库
                    keyReplyBiz.addKeyWords(keyReply);
@@ -183,10 +184,8 @@ public class KeyMsgToReplyController {
            }
        }
 
-       
-       
        long  endTime=System.currentTimeMillis();
-       System.out.println("运行时间："+String.valueOf(endTime-startTime)+"ms");
+//       System.out.println("运行时间："+String.valueOf(endTime-startTime)+"ms");
        if( endTime>=0 ){
     	   jm.setCode(1);
        }else{

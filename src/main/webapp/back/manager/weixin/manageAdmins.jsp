@@ -26,6 +26,8 @@
 			idField:"aid",		//标识，会记录我们选中的一行的ID，不一定是ID，通常是主键
 			rownumbers:"true",	 //显示行号
 			nowrap:"true",		//不换行显示
+			sortName:"aid",		//排序的列 这个参数会传到后台的servlet上，所以要有后台对应的接收
+			sortOrder:"desc",   //排序方式
 			singleSelect:true,
 			//以上的四种增删改查操作，只要失败，都会回调这个onError
 			onError:function(a,b){
@@ -179,35 +181,12 @@
 					return time=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 				}
 			}]]
-		});
+		});		
 	});
 	
-	function showMenu(){
-		$.ajax({
-			type:"POST",
-			data:"role=root",
-			url:"back/showMenu.action",
-			dataType:"JSON",
-			success:function(data){
-				if(data.code ==1){
-					var str="";
-					str+='<ul class="easyui-tree"><li>'+
-					'<span>微信后台管理界面</span><ul>'+
-						'<c:forEach items="${preMenuList }" var="m">'+
-							'<li>'+
-								'<span>${m.mtitle }</span>'+
-							'</li></c:forEach></ul></li></ul>';
-					$("#p").html(str);
-				}else{
-					alert("删除失败，"+data.msg);
-				}
-			}
-		});
-	};
-	
 	function add() {
-		var aname=$('#aname').val();
-		var apwd=$('#apwd').val();
+		var aname=$().val();
+		var apwd=$().val();
 		if(aname!=""&&apwd!=""){
 			$.ajax({
 				type : "POST",
@@ -224,9 +203,9 @@
 				}
 			});
 		}else{
-			alert('用户名和密码不能为空！');
+			alert("用户名和密码不能为空！");
 		}
-	};
+	}
 	
 	$.extend($.fn.validatebox.defaults.rules, {
 	    equals: {
@@ -237,9 +216,11 @@
 	    }
 	});
 </script>
+<title>角色管理</title>
 </head>
 <body class="easyui-layout">
 	<table id="manTypeTable" data-options="rownumbers:true,singleSelect:true"></table>
+	
 	<%--弹窗 --%>
 	<div id="dlg" class="easyui-dialog" style="text-align:center;width:400px;height:300px;padding:10px 20px" closed="true">
 		<form id="adminForm" method="post" novalidate>

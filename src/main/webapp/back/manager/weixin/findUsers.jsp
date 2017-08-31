@@ -34,9 +34,6 @@
                      var url = '${pageContext.request.contextPath}/toExcel.action';  
                      window.location.href=url; 
 				}
-			},"-",{
-				text:"已关注人数:",
-				iconCls:'icon-ok'
 			}],
 			
 			columns:[[{
