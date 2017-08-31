@@ -40,8 +40,6 @@ import com.wx.message.Image;
 import com.wx.message.ImageMessage;
 import com.wx.message.TextMessage;
 import com.wx.user.biz.UserBiz;
-import com.wx.wxwall.entity.User;
-import com.wx.wxwall.websocket.MyWebSocketHandler;
 
 @Controller
 public class WeixinController {
@@ -64,10 +62,6 @@ public class WeixinController {
 	@Resource(name="secondMenuDbBizImpl")
 	private SecondMenuDbBiz secondMenuDbBiz;
 	
-	@Resource
-	MyWebSocketHandler handler;
-	//用于微信墙
-	Map<Long, User> users = new HashMap<Long, User>();
 	
 	
 	

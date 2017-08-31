@@ -6,8 +6,8 @@ public class CommonBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Integer pages;
-	private Integer pagesize;
+	private Integer pages=1;
+	private Integer pagesize=50;
 	private String orderby;     //select * from xxx order by 列名  desc/asc
 	private String orderway;
 	private Integer start;
