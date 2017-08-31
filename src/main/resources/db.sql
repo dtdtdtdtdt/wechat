@@ -21,7 +21,6 @@ insert into admin(aname,apwd,role,atime) values('a','a','root',now());
 
 select * from admin where role='root';
 
-select * from admin where aname = 'a'#' and apwd = '11'
 
 --菜单表
 create table menu(
@@ -36,6 +35,7 @@ insert into menu(menu,mtitle) values('messageTree','消息管理');
 insert into menu(menu,mtitle) values('sourceTree','素材管理');
 insert into menu(menu,mtitle) values('menuTree','菜单管理');
 insert into menu(menu,mtitle) values('smallTree','微程序');
+insert into menu(menu,mtitle) values('shopTree','商城管理');
 
 select * from menu where mid=1
 insert into role(role,menu,mtitle) values('',);
@@ -62,6 +62,7 @@ insert into role(role,menu,mtitle) values('root','messageTree','消息管理');
 insert into role(role,menu,mtitle) values('root','sourceTree','素材管理');
 insert into role(role,menu,mtitle) values('root','menuTree','菜单管理');
 insert into role(role,menu,mtitle) values('root','smallTree','微程序');
+insert into role(role,menu,mtitle) values('root','shopTree','商城管理');
 
 insert into role(role,menu,mtitle) values('admin','userTree','粉丝管理');
 insert into role(role,menu,mtitle) values('admin','messageTree','消息管理');

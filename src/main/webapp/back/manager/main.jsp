@@ -112,13 +112,13 @@
 			{
 				"text" : "游戏",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
+					"url" : "<iframe width='40%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
 				}
 			},
 			{
 				"text" : "抽奖赚积分",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='http://www.kxtui.com/c2/i.jsp?idcm=1392787&jgiscre=jHnMkp57rLsvSN3JPoR7UXieqcdF118w'/>"
+					"url" : "<iframe width='40%' height='100%' src='ward.jsp'/>"
 				}
 			},
 			{
@@ -128,7 +128,38 @@
 				}
 			}];
 		
-	
+		var shopTree = [
+			{
+				"text" : "会员中心",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "积分管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "金库管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "商品管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "优惠券管理",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			},{
+				"text" : "最新活动",
+				"attributes" : {
+					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+				}
+			}];
 		
 		
 		showTree("safeTree", safeTree);
@@ -137,7 +168,7 @@
 		showTree("userTree", userTree);
 		showTree("menuTree", menuTree);
 		showTree("smallTree", smallTree);
-
+		showTree("shopTree", shopTree);
 	});
 
 	function showTree(treeId, data) {

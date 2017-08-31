@@ -26,7 +26,7 @@ public class InitController {
 	@RequestMapping(value="/shop/toIndex.action",method = RequestMethod.GET)
 	public void init(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		//回调网址
-		String backUrl ="http://24dd96d3.ngrok.io/wechat/shop/callBack.action";  
+		String backUrl ="http://119.23.65.165/wechat/shop/callBack.action";  
 		
 		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?"
 				+ "appid="+WeixinUtil.APPID+"&redirect_uri="+URLEncoder.encode(backUrl)+
