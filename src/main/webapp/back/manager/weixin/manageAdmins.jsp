@@ -52,7 +52,6 @@
 				text:"添加",
 				iconCls:'icon-add',
 				handler:function(){
-					$('#dlg').dialog('open').dialog('center').dialog('setTitle','添加管理员');
 					$.ajax({
 						type : "POST",
 						url : "back/reloadRole.action",
@@ -63,6 +62,7 @@
 							}
 						}
 					});
+					$('#dlg').dialog('open').dialog('center').dialog('setTitle','添加管理员');
 				}
 			},'-',{
 				text:"删除",
@@ -86,6 +86,8 @@
 										}
 									}
 								});
+							}else{
+								alert("请选择操作的行！");
 							}
 		                }  
 		            });
@@ -111,6 +113,8 @@
 								}
 							}
 						});
+					}else{
+						alert("请选择操作的行！");
 					}
 				}
 			}],
@@ -185,8 +189,8 @@
 	});
 	
 	function add() {
-		var aname=$().val();
-		var apwd=$().val();
+		var aname=$("#aname").val();
+		var apwd=$("#apwd").val();
 		if(aname!=""&&apwd!=""){
 			$.ajax({
 				type : "POST",
@@ -222,7 +226,7 @@
 	<table id="manTypeTable" data-options="rownumbers:true,singleSelect:true"></table>
 	
 	<%--弹窗 --%>
-	<div id="dlg" class="easyui-dialog" style="text-align:center;width:400px;height:300px;padding:10px 20px" closed="true">
+	<div id="dlg" class="easyui-dialog" style="text-align:center;width:400px;height:300px;" closed="true">
 		<form id="adminForm" method="post" novalidate>
 			<br>
 			<div>

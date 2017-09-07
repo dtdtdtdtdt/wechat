@@ -1,5 +1,7 @@
 package com.wx.shop.biz.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -36,6 +38,12 @@ public class WxshopUserBizImpl implements WxshopUserBiz{
 	@Override
 	public void updateWxShopUserByOpenid(WxshopUser wxshopUser) {
 		baseDao.update(wxshopUser, "updateWxShopUserByOpenid");
+	}
+
+
+	@Override
+	public List<WxshopUser> findAllWxShopUser() {
+		return baseDao.findAll(WxshopUser.class, "findAllWxshopUser");
 	}
 
 }

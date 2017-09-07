@@ -54,7 +54,7 @@
 		      	<li>
 		        <div class="am-gallery-item">
 		            <a href="../shop/detail.action?fid=${w.fid }" class="">
-		              <img src="${w.cover }"  alt=""/>
+		              <img src="../../${w.cover }"  alt=""/>
 		              <h3 class="am-gallery-title">${w.name }</h3>
 		              <div class="am-gallery-desc">
 		              	<em>${w.normprice }</em><i class="am-icon-cart-plus"></i>
@@ -66,6 +66,38 @@
 	 </ul>
 		 
 		 
-<%@ include file="buttom.jsp" %>		 
+<div class="h50"></div>
+		<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default footer "  id="nav">
+		      <ul class="am-navbar-nav am-cf am-avg-sm-4">
+		          <li >
+		            <a href="jsp/index.jsp" class="">
+		                <span class=""><img src="images/nav.png"/></span>
+		                <span class="am-navbar-label">点餐</span>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="jsp/speak.jsp" class="">
+		                <span class=""><img src="images/nav2.png"/></span>
+		                <span class="am-navbar-label">客说</span>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="jsp/we.jsp" class="">
+		                <span class=""><img src="images/nav3.png"/></span>
+		                <span class="am-navbar-label">我们</span>
+		            </a>
+		          </li>
+		          <li >
+		            <a href="jsp/member.jsp" class="">
+		                <span class=""><img src="images/nav4.png"/></span>
+		                <span class="am-navbar-label">我的</span>
+		            </a>
+		          </li>
+		   
+		      </ul>
+		</div>
+
+	</body>
+</html>		 
 		 
 		 

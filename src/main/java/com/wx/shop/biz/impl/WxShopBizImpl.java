@@ -36,4 +36,25 @@ public class WxShopBizImpl implements WxShopBiz {
 		return null;
 	}
 
+	@Override
+	public int findWxShopCount(WxShop wxShop) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addWxShop(WxShop wxShop) {
+		baseDao.save(wxShop, "addWxShop");
+	}
+
+	@Override
+	public void deleteWxShop(WxShop wxShop) {
+		baseDao.del(wxShop, "deleteWxShop");
+	}
+
+	@Override
+	public void updateWxShop(WxShop wxShop) {
+		baseDao.update(wxShop, "updateWxShop");
+	}
+
 }

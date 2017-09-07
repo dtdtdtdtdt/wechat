@@ -22,6 +22,8 @@
 
 	</update>
 
-	
-
+	<!-- 查询所有商城用户 -->
+	<select id="findAllWxshopUser" resultType="WxshopUser">
+		select * from wxshopuser
+	</select>
 </mapper>

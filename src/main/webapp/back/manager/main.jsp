@@ -118,7 +118,7 @@
 			{
 				"text" : "抽奖赚积分",
 				"attributes" : {
-					"url" : "<iframe width='40%' height='100%' src='ward.jsp'/>"
+					"url" : "<iframe width='40%' height='100%' src='ward/toIndex.action'/>"
 				}
 			},
 			{
@@ -132,32 +132,17 @@
 			{
 				"text" : "会员中心",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+					"url" : "<iframe width='100%' height='100%' src='back/manager/shop/manageWxshopUser.jsp'/>"
 				}
 			},{
-				"text" : "积分管理",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
-				}
-			},{
-				"text" : "金库管理",
+				"text" : "订单管理",
 				"attributes" : {
 					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
 				}
 			},{
 				"text" : "商品管理",
 				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
-				}
-			},{
-				"text" : "优惠券管理",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
-				}
-			},{
-				"text" : "最新活动",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%' src='404.jsp'/>"
+					"url" : "<iframe width='100%' scrolling='no' height='100%' src='back/manager/shop/manageFood.jsp'/>"
 				}
 			}];
 		
@@ -225,8 +210,8 @@
 				欢迎您，${admin.aname }&nbsp;&nbsp;<a href="adminLogout.action">退出</a>
 		</div>
 	</div>
-	<div data-options="region:'south'" style="height: 50px;">
-		<div style="font-size:20px;height:auto;text-align:center">
+	<div data-options="region:'south'" style="height: 20px;">
+		<div style="font-size:15px;height:auto;text-align:center">
 			刘翔、丁婷、朱鹏 &copy; 版权所有
 		</div>
 	</div>

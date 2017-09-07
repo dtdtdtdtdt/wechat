@@ -3,6 +3,5 @@
 
     
 <%
-	
 	request.getRequestDispatcher("shop/toIndex.action").forward(request, response);
 %>    

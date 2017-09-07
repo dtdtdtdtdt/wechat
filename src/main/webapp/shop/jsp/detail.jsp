@@ -8,8 +8,8 @@
 	<body>
 		<div data-am-widget="slider" class="am-slider am-slider-default" data-am-slider='{}' >
 			  <ul class="am-slides">
-			      <li><img src="${ws.detaila }"> </li>
-			      <li><img src="${ws.detailb }"> </li>
+			      <li><img src="../../${ws.detaila }"> </li>
+			      <li><img src="../../${ws.detailb }"> </li>
 			  </ul> 
 		</div>
 		<div class="detail">
@@ -34,15 +34,10 @@
 		</div>
 		-->
         <div class="detail-con">
-        	<p>  排毒排便－香蕉牛奶汁</p>
-	      	<p>  适量加入牛奶调理，可以补充更多钙质，对于正在减肥中的女孩来说，也比较有饱足感。经常失眠或是容易经痛的女孩也可以喝喝看！</p>
-	      	<br />
-	      	<br />
-	      	<p>  止咳防晕－芒果汁</p>
-	      	<p>  退火利尿－椰子汁</p>
-	      	<p>  不过有的人会怕椰子的味道，也因为椰子水生冷寒性，因此女孩们如果想喝椰子水来消暑，或是肠胃不好的人，在喝之前还是要三思！</p>
-	      	<p>  水果之王－奇异果汁</p>
-	      	<img src="images/banner.jpg" />
+        	<center>
+				<p>${ws.detail }</p>
+			</center>
+        	
         </div>
 		<div class="h50"></div>
 		<ul class="fixed-btn">

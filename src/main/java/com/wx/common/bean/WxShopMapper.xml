@@ -35,10 +35,24 @@
 		select * from wxshop where fid=#{fid}
 	</select>
 
-
-
-
-
+	<!-- 查询需要的数目 -->
+	<select id="findWxShopCount" parameterType="WxShop" resultType="int">
+		select count(1) from wxshop
+	</select>
 	
-
+	<insert id="addWxShop" parameterType="WxShop"  useGeneratedKeys="true" keyProperty="fid">
+		insert into wxshop(name,normprice,realprice,detail,cover,detaila,detailb,stock) 
+		values(#{name},#{normprice},#{realprice},#{detail},#{cover},#{detaila},#{detailb},#{stock})
+	</insert>
+	
+	<!-- 根据fid删除菜品 -->
+	<delete id="deleteWxShop" parameterType="WxShop">
+		delete from wxshop where fid=#{fid}
+	</delete>
+	
+	<!-- 根据fid更新 -->
+	<update id="updateWxShop" parameterType="WxShop">
+		update wxshop set name=#{name},normprice=#{normprice},realprice=#{realprice},
+		stock=#{stock} where fid=#{fid}
+	</update>
 </mapper>

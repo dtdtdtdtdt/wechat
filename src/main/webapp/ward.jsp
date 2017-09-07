@@ -74,31 +74,53 @@ $(".box1 .img01").load(function() {
 
 function callbackB(ind)
 {
+	var openid=<%=session.getAttribute("openId")%>;
+	var wcount="";
 	if(ind==1){
+		wcount=5;
 		alert("恭喜获得5积分！");
 	}else if(ind==2){
+		wcount=1;
 		alert("恭喜获得1积分！");
 	}else if(ind==3){
 		alert("不服再来！");
 	}else if(ind==4){
+		wcount=1;
 		alert("恭喜获得1积分！");
 	}else if(ind==5){
+		wcount=3;
 		alert("恭喜获得3积分！");
 	}else if(ind==6){
 		alert("运气先攒着！");
 	}else if(ind==7){
+		wcount=1;
 		alert("恭喜获得1积分！");
 	}else if(ind==8){
+		wcount=3;
 		alert("恭喜获得3积分！");
 	}else if(ind==9){
 		alert("继续加油！");
 	}else if(ind==10){
+		wcount=10;
 		alert("恭喜获得10积分！");
 	}else if(ind==11){
+		wcount=1;
 		alert("恭喜获得1积分！");
 	}else if(ind==12){
 		alert("再接再厉！");
 	}
+	alert(openid+"==="+wcount);
+	$.ajax({
+		type : "POST",
+		data:"openid="+openid+"&wcount="+wcount,
+		url : "back/addWard.action",
+		dataType : "JSON",
+		success : function(data) {
+			if (data.code == 0) {
+				alert("记录抽奖信息失败！" + data.msg);
+			}
+		}
+	});
 };
 
 var newdraw2 =new turntableDraw('.drawBtn2',{
