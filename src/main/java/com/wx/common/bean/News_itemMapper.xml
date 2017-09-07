@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--   namespace:命名空间 -->
+<mapper namespace="com.wx.common.bean.News_itemMapper">
+
+	<!-- 加入带日志的ehcache缓存  -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<!-- 添加微信返回的永久素材 -->
+	<insert id="addReturnArticle" parameterType="News_item" useGeneratedKeys="true" keyProperty="id">
+		insert into news_item
+			(title,author,digest,content,content_source_url,
+			thumb_media_id,show_cover_pic,url,thumb_url) 
+		values
+			(#{title},#{author},#{digest},#{content},#{content_source_url},
+			#{thumb_media_id},#{show_cover_pic},#{url},#{thumb_url})
+	</insert>
+		
+		
+		
+	<!-- 批量添加素材 
+	<insert id="" parameterType="" useGeneratedKeys="true" keyProperty="id">
+		insert into article(title,thumb_media_id,uid) values
+			<foreach collection="list" open="" close="" separator="," item="item">
+				(#{item.voteid},#{item.vsid},#{item.uid})
+			</foreach>
+	</insert>
+	
+	<insert id="addArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+		insert into article
+			(title,thumb_media_id,author,digest,show_cover_pic,content,content_source_url) 
+		values
+			(#{title},#{thumb_media_id},#{author},#{digest},#{show_cover_pic},#{content},#{content_source_url})
+	</insert>
+
+	<update id="updateArticle">
+		update article set 
+			title=#{title},thumb_media_id=#{thumb_media_id},
+			author=#{author},digest=#{digest},
+			show_cover_pic=#{show_cover_pic},
+			content=#{content},content_source_url=#{content_source_url}
+		where id=#{id}
+	</update>
+	
+	<delete id="delArticle" parameterType="Article">
+		delete from article where id=#{id}
+	</delete>
+	
+	-->
+	
+	
+</mapper>

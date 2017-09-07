@@ -28,9 +28,9 @@ import com.wx.common.bean.AccessTokenZp;
 import net.sf.json.JSONObject;
 
 public class WeixinUtil {
-	
-	public static final String APPID = "wx728060a0fdaaa085";
-	public static final String APPSECRET = "222c0b10fae1b6d4a276793c67ffb12a";
+					
+	public static final String APPID = "wxd3fccc0db91993f5";
+	public static final String APPSECRET = "f478c4272e1be1b92730d689b00db316";
 
 
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
@@ -48,6 +48,28 @@ public class WeixinUtil {
 	public static final String USERLIST_URL="https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
 	
 	public static final String USER_URL="https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+	
+	//上传缩略图
+	public static final String MEDIA_UPLOAD_URL="https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=ACCESS_TOKEN&type=TYPE";
+
+	//素材管理的url
+	public static final String SOURCESE_URL="https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=ACCESS_TOKEN";
+	
+	//素材管理   上传图文消息内的图片获取URL 
+	public static final String PiCTURE_URL ="https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=ACCESS_TOKEN";
+	
+	//获取openid
+	public static final String GET_OPENID_URL ="https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
+	
+	//群发
+	public static final String MASS_URL ="https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
+
+	//获取永久素材
+	public static final String GET_MEDIA_URL ="https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=ACCESS_TOKEN";
+	
+	//获取永久素材列表
+	public static final String GET_SOURCELIST_URL ="https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
+	
 	/**
 	 * get请求
 	 * 

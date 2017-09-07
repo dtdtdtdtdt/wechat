@@ -5,7 +5,6 @@ create table admin(
     aid int primary key auto_increment,
     aname varchar(50),
     apwd  varchar(50),
-    atime datetime,
     role varchar(50),
     atime datetime not null
 )
@@ -92,7 +91,7 @@ create table users(
 drop table user
 select distinct city from users where country='中国'
 select count(1) as value from users where city='深圳'
-
+select * from users
 insert into user(total,openid,subscribe,subscribe_time,nickname,
 sex,country,province,city,language,headimgurl,remark,groupid,tagid_list) 
 values(#{total},#{openid},#{subscribe},#{subscribe_time},#{nickname},#{sex},

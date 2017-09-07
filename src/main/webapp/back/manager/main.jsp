@@ -42,31 +42,26 @@
 
 		var sourceTree = [
 			{
-				"text" : "添加素材",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-				"text" : "修改素材",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-
-				"text" : "删除素材",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			},
-			{
-
-				"text" : "所有素材",
-				"attributes" : {
-					"url" : "<iframe width='100%' height='100%'/>"
-				}
-			}];
+			"text" : "添加素材",
+			"attributes" : {
+				"url" : "<iframe width='100%' height='100%' src='back/manager/source/addArticle.jsp' />"
+			}
+		}, {
+			"text" : "图片库管理",
+			"attributes" : {
+				"url" : "<iframe width='100%' height='100%' src='back/manager/source/managePicture.jsp'/>"
+			}
+		}, {
+			"text" : "群发消息管理",
+			"attributes" : {
+				"url" : "<iframe width='100%' height='100%' src='back/manager/source/manageMass.jsp'/>"
+			}
+		}, {
+			"text" : "素材列表管理",
+			"attributes" : {
+				"url" : "<iframe width='100%' height='100%' src='back/manager/source/manageArticle.jsp'/>"
+			}
+		}];
 		
 		var userTree = [
 			{

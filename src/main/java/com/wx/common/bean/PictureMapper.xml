@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--   namespace:命名空间 -->
+<mapper namespace="com.wx.common.bean.PictureMapper">
+
+	<!-- 加入带日志的ehcache缓存  -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<!-- 添加图片  -->
+	<insert id="addPicture" parameterType="Picture" useGeneratedKeys="true" keyProperty="pid">
+		insert into picture
+			(pname,thumb_media_id,webUrl,pdate)
+		values
+			(#{pname},#{thumb_media_id},#{webUrl},now())
+	</insert>
+	
+	<delete id="delPicture" parameterType="Picture">
+		delete from picture where pid=#{pid}
+	</delete>
+	
+	
+	<!-- 排序条件的拼接 -->
+	<sql id="orderSql">
+		<if test="orderby !=null and orderby !=''">
+			order by #{orderby}
+			<if test="orderway!=null and orderway!=''">
+				#{orderway}
+			</if>
+		</if>	
+	</sql>
+	
+	<!-- 分页条件的拼接 -->
+	<sql id="pageSql">
+		<if test="start!=null">
+			limit ${start},${pagesize}
+		</if>
+	</sql>
+	
+	<!-- 查找素材  -->
+	<select id="findPicture" parameterType="Picture" resultType="Picture">
+		select * from picture
+		<include refid="orderSql" />
+		<include refid="pageSql" />	
+	</select>
+
+	<!-- 显示所有图片信息 -->
+	<select id="showPicture" parameterType="Picture" resultType="Picture">
+		select webUrl from picture
+		<include refid="orderSql" />
+		<include refid="pageSql" />	
+	</select>
+
+</mapper>
